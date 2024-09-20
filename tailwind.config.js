@@ -5,7 +5,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "baby-blue": "#89CFF0",
+        "baby-purple": "#89AFF0",
+        "baby-green" : "#B1DDC9",
+        "baby-orange" : "#ffd3b6",
+        "baby-yellow" : "#ffffba",
+        "simon" :"#ff8b94",
+        "baby-blue" :"#bae1ff"
       },
     },
   },
