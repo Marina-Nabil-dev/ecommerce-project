@@ -1,47 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.min.css";
-
+import 'swiper/css';
+import 'swiper/css/navigation'; // if you need navigation
+import 'swiper/css/pagination'; // if you need pagination
+import { Navigation, Pagination } from 'swiper';
+import { getApiData } from "../helpers/getApiData";
+import { HomeRoutes } from "../routes/home";
 const RecentlyAddedProducts = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Product 1",
-      price: "$100",
-      images: ["/images/product1.jpg", "/images/product1-2.jpg"],
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      price: "$150",
-      images: ["/images/product2.jpg", "/images/product2-2.jpg"],
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: "$200",
-      images: ["/images/product3.jpg", "/images/product3-2.jpg"],
-    },
-  ];
+  const [products , setProducts] = useState([])
+
+  const fetchProducts = async ()=>
+  {
+        try {
+            const response = await getApiData(HomeRoutes.PRODUCTS);
+            const firstTenProducts = response.slice(0, 7);
+            setProducts(firstTenProducts);            
+
+            
+        } catch (error) {
+            console.log(error);
+        }
+  }
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
-    <div className="my-8 p-4">
-      <h2 className="text-center text-2xl text-baby-blue">
+    <div className="my-8 mx-5 p-4">
+      <h2 className="text-center text-2xl text-baby-blue font-semibold">
         Recently Added Products
       </h2>
-      <div className="grid md:grid-cols-3 gap-4 mt-6">
+      <div className="grid md:grid-cols-4 gap-3 mt-4">
         {products.map((product) => (
           <div key={product.id} className="border rounded p-4">
             <Swiper>
               {product.images.map((img, idx) => (
                 <SwiperSlide key={idx}>
-                  <img src={img} alt={product.name} className="mx-auto h-40" />
+                  <img src={img} alt={product.slug} className="mx-auto size-64" />
                 </SwiperSlide>
               ))}
             </Swiper>
-            <div className="text-center my-2">
-              <h3>{product.name}</h3>
-              <p className="text-baby-blue font-bold">{product.price}</p>
+            <div className="flex my-2">
+              <h3 className="text-left">{product.title}</h3>
+              <span className="ml-auto text-end text-baby-blue font-bold">{product.price} EGP</span>
             </div>
           </div>
         ))}

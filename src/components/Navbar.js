@@ -15,7 +15,7 @@ const Navbar = () => {
       </div>
       <div className="hidden md:flex space-x-4">
         <button className="text-white">Login</button>
-        <button className="text-white bg-white text-baby-blue px-4 py-2 rounded">
+        <button className=" bg-white text-baby-blue px-4 py-2 rounded">
           Sell Your Product
         </button>
       </div>
@@ -24,7 +24,7 @@ const Navbar = () => {
       {isOpen && (
         <div className="absolute right-0 top-0 bg-baby-blue h-screen w-2/3 flex flex-col items-center">
           <button className="text-white my-4">Login</button>
-          <button className="text-white bg-white text-baby-blue px-4 py-2 rounded">
+          <button className=" bg-white text-baby-blue px-4 py-2 rounded">
             Sell Your Product
           </button>
         </div>

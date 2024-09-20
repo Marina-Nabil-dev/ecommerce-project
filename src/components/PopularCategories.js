@@ -1,27 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getApiData } from "../helpers/getApiData";
+import { HomeRoutes } from "../routes/home";
 
 const PopularCategories = () => {
-  const categories = [
-    { id: 1, name: "Electronics", image: "/images/electronics.png" },
-    { id: 2, name: "Clothing", image: "/images/clothing.png" },
-    { id: 3, name: "Home Appliances", image: "/images/appliances.png" },
-    { id: 4, name: "Books", image: "/images/books.png" },
-  ];
+    const [categories, setCategories] = useState([]);
+
+    const fetchCategories = async () => {
+        try {
+            const response = await getApiData(HomeRoutes.CATEGORIES);
+            const firstFiveCategories = response.slice(0, 5);
+            setCategories(firstFiveCategories);
+            console.log(firstFiveCategories);
+            
+            
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
   return (
     <div className="my-8 p-4">
-      <h2 className="text-center text-2xl text-baby-blue">
+      <h2 className="text-center text-2xl text-baby-blue font-semibold">
         Popular Categories
       </h2>
-      <div className="grid md:grid-cols-4 gap-4 mt-6 text-center">
+      <div className="grid md:grid-cols-3 gap-3 mt-6 text-center">
         {categories.map((category) => (
-          <div key={category.id} className="border rounded p-4">
+          <div key={category.id} className="border border-baby-blue rounded-lg p-4">
             <img
               src={category.image}
               alt={category.name}
-              className="mx-auto h-20"
+              className="mx-auto h-24 w-32"
             />
-            <h3 className="mt-4">{category.name}</h3>
+            <h3 className="mt-4  font-semibold">{category.name}</h3>
           </div>
         ))}
       </div>
