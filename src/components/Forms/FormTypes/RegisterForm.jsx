@@ -34,7 +34,7 @@ function RegisterForm({
     <>
       <form onSubmit={formik.handleSubmit}>
         <FormField
-          label="Phone number or email"
+          label="Phone number"
           name="mobile_number"
           type="text"
           value={formik.values.mobile_number}
@@ -53,6 +53,22 @@ function RegisterForm({
           }
         />
 
+<FormField
+          label="Email"
+          name="email"
+          type="text"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.email}
+          backendError={
+            errors && errors["msg"] ? errors["msg"] : null
+          }
+          touched={formik.touched.email}
+          placeholder="DQn0w@example.com"
+        
+        />
+
         <FormField
           label="Full Name"
           name="name"
@@ -61,7 +77,7 @@ function RegisterForm({
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.errors.name}
-          backendError={errors["name"] ?? errors["name"]}
+          backendError={errors["msg"] ?? errors["msg"]}
           touched={formik.touched.name}
           placeholder="John Doe"
         />
@@ -74,20 +90,20 @@ function RegisterForm({
           onBlur={formik.handleBlur}
           error={formik.errors.password}
           touched={formik.touched.password}
-          backendError={errors ?? errors["password"][0]}
+          backendError={errors ?? errors["msg"]}
           showPassword={showPassword}
           toggleVisibility={togglePasswordVisibility}
         />
 
         <PasswordInput
           label="Confirm Password"
-          name="password_confirmation"
-          value={formik.values.password_confirmation}
+          name="rePassword"
+          value={formik.values.rePassword}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.password_confirmation}
-          touched={formik.touched.password_confirmation}
-          backendError={errors ?? errors["password_confirmation"][0]}
+          error={formik.errors.rePassword}
+          touched={formik.touched.rePassword}
+          backendError={errors ?? errors["msg"]}
           showPassword={showConfirmPassword}
           toggleVisibility={toggleConfirmPasswordVisibility}
         />

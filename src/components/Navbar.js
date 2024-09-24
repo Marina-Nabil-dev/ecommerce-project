@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
+import { UserContext } from "../contexts/userContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
+  let { userToken } = useContext(UserContext);
 
   const openModal = (type) => {
     setModalType(type);
@@ -26,17 +28,26 @@ const Navbar = () => {
             onClick={() => setIsOpen(!isOpen)}
           />
         </div>
+        {userToken == null ? (
         <div className="hidden md:flex space-x-4">
           <button
-            className="text-white border rounded-full px-4 py-2 bg-simon"
+            className="text-white border rounded-full px-4 py-2 bg-simon hover:bg-dark-simon" 
             onClick={() => openModal("login")}
           >
             Login
           </button>
+
           <button className=" bg-white text-baby-purple font-bold px-4 py-2 rounded-full">
             Sell Your Product
           </button>
         </div>
+        ) : (
+          <button
+            className="text-white border rounded-full px-4 py-2 bg-simon  hover:bg-dark-simon"
+          >
+            Logout
+          </button>
+        )}
 
         {/* Mobile menu */}
         {isOpen && (

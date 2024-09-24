@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AuthRoutes } from "../../routes/authRoutes";
@@ -8,10 +8,12 @@ import ModalComponent from './../ModalComponent';
 import GoogleRegisterButton from './../../components/Forms/Fields/GoogleRegisterButton';
 import LoadingButton from './../../components/Forms/Fields/LoadingButton';
 import { postApiData } from '../../helpers/postApiData';
+import { UserContext } from "../../contexts/userContext";
 
 const LoginModal = ({ closeModal, showImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
+  const { userToken, setUserToken } = useContext(UserContext);
 
   const openModal = (type) => {
     setModalType(type);
@@ -37,9 +39,13 @@ const LoginModal = ({ closeModal, showImage }) => {
 
     const { status, message, data } = response;
     if (status === 200) {
-      console.log(data);
+      // closeModal();      
+      setUserToken(data.token);
+    
       
-      // closeModal();
+      console.log(userToken);
+      
+      closeModal();
     }
     if (status == 422) {
       setErrors(data);
@@ -52,13 +58,13 @@ const LoginModal = ({ closeModal, showImage }) => {
 
   const loginForm = useFormik({
     initialValues: {
-      mobile_number: "",
+      email: "",
       password: "",
       dial_code: "+20",
     },
 
     validationSchema: Yup.object({
-      mobile_number: Yup.string().required("Phone number is required"),
+      email: Yup.string().required("Email is required"),
       password: Yup.string()
         .required("Password is required")
         .min(8, "Password must be at least 8 characters"),
@@ -94,23 +100,18 @@ const LoginModal = ({ closeModal, showImage }) => {
           {message && <p className="text-red-500 font-semibold">{message}</p>}
 
           <FormField
-            label="Phone number or email"
-            name="mobile_number"
-            type="text"
-            value={loginForm.values.mobile_number}
+            label="Email"
+            name="email"
+            type="email"
+            value={loginForm.values.email}
             onChange={loginForm.handleChange}
             onBlur={loginForm.handleBlur}
-            error={loginForm.errors.mobile_number}
+            error={loginForm.errors.email}
             backendError={
-              errors && errors["mobile_number"] ? errors["mobile_number"] : null
+              errors && errors["email"] ? errors["email"] : null
             }
-            touched={loginForm.touched.mobile_number}
-            placeholder="1287748574"
-            additionalContent={
-              <span className="inline-flex items-center p-2 px-3 bg-gray-50 rounded-md rounded-r-none border-r border-gray-300 group-focus-within:border-black">
-                +20
-              </span>
-            }
+            touched={loginForm.touched.email}
+            placeholder="email"
           />
 
           <PasswordInput
@@ -168,7 +169,7 @@ const LoginModal = ({ closeModal, showImage }) => {
           isOpen={isModalOpen}
           closeModal={closeModal}
           modalType={modalType}
-          showImage={true}
+          showImage={false}
           modalProps={
             {
               /* pass any additional props here */

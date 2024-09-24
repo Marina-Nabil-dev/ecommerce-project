@@ -14,19 +14,20 @@ const RegisterModal = ({ closeModal, showImage }) => {
     name: "",
     mobile_number: "",
     password: "",
-    password_confirmation: "",
+    rePassword: "",
     dial_code: "+20",
   });
   const { isModalOpen, modalType, openModal, closeOpenModal } = useModal();
 
 
   const validationSchema = Yup.object().shape({
-    mobile_number: Yup.string().required("Phone number or email is required"),
+    mobile_number: Yup.string().required("Phone number is required"),
+    email: Yup.string().required("Email is required"),
     name: Yup.string().required("Full Name is required"),
     password: Yup.string()
       .required("Password is required")
       .min(8, "Password must be at least 8 characters"),
-    password_confirmation: Yup.string()
+      rePassword: Yup.string()
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password"), null], "Passwords must match"),
   });

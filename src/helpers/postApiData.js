@@ -11,14 +11,12 @@ export const postApiData = async (routeName, data) => {
       process.env.REACT_APP_API_DEVELOP_URL + routeName,
       data,
       { headers }
-    );
-    const setCookieHeader = response.headers["set-cookie"];
-    console.log(setCookieHeader);
+    );    
 
     return {
       status: response.status,
       message: response.data.message,
-      data: response.data.data,
+      data: response.data,
     };
   } catch (error) {
     return {

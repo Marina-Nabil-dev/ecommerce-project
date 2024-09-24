@@ -3,8 +3,8 @@ import React from "react";
 function LoadingButton({ isLoading, text, onClick }) {
   return (
     <button
-      className="w-full mt-6 items-center justify-center text-center flex font-bold
-       bg-primary text-white py-2 px-4 rounded-full hover:bg-primaryDarker focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      className="w-full mt-6 items-center justify-center text-center flex font-bold bg-simon
+       bg-primary text-white py-2 px-4 rounded-full hover:bg-dark-simon focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       onClick={onClick}
       disabled={isLoading}
     >
