@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 export const postApiData = async (routeName, data) => {
   try {
     const headers = {
