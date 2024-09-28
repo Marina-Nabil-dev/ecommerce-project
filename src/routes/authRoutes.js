@@ -4,4 +4,5 @@ export const AuthRoutes = {
     COMPLETE_PROFILE: "complete-profile",
     FORGOT_PASSWORD: "forgot-password",
     RESET_PASSWORD: "reset-password",
+    LOGOUT: "auth/logout",
 }

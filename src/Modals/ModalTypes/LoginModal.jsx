@@ -40,11 +40,8 @@ const LoginModal = ({ closeModal, showImage }) => {
     const { status, message, data } = response;
     if (status === 200) {
       // closeModal();      
+      localStorage.setItem("userToken", data.token);
       setUserToken(data.token);
-    
-      
-      console.log(userToken);
-      
       closeModal();
     }
     if (status == 422) {

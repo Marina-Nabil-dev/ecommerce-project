@@ -18,6 +18,11 @@ const Navbar = () => {
     setIsModalOpen(false);
     setModalType("");
   };
+
+  const handleLogout =  () => {
+    localStorage.removeItem("userToken");
+    window.location.reload();
+  };
   return (
     <>
       <nav className="bg-baby-purple flex justify-between items-center p-4">
@@ -44,6 +49,7 @@ const Navbar = () => {
         ) : (
           <button
             className="text-white border rounded-full px-4 py-2 bg-simon  hover:bg-dark-simon"
+            onClick={handleLogout}
           >
             Logout
           </button>
