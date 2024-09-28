@@ -12,6 +12,10 @@ const Navbar = () => {
   const [modalType, setModalType] = useState("");
   let { userToken } = useContext(UserContext);
 
+  if (!userToken) {
+    userToken = localStorage.getItem("userToken");
+  }
+
   const openModal = (type) => {
     setModalType(type);
     setIsModalOpen(true);

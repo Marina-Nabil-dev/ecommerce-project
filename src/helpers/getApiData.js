@@ -12,6 +12,7 @@ export const getApiData = async (routeName) => {
     );
     
     const result = response.data.data;
+    
     if (typeof (result == Object)) {
 
       return Object.values(result);
