@@ -4,11 +4,13 @@ import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
 import "swiper/css/pagination"; // if you need pagination
 import { Navigation, Pagination } from "swiper";
-import { getApiData } from "../helpers/getApiData";
-import { HomeRoutes } from "../routes/home";
-import Spinner from "../icons/Spinner";
+import { getApiData } from "../../helpers/getApiData";
+import { HomeRoutes } from "../../routes/home";
+import Spinner from "../../icons/Spinner";
 import { useQuery } from "react-query";
-const RecentlyAddedProducts = () => {
+import { Link } from "react-router-dom";
+import { NavbarRoutes } from "../../routes/navbarRoutes";
+const RecentlyAddedSection = () => {
   function fetchProducts() {
     const response = getApiData(HomeRoutes.PRODUCTS);
     return response;
@@ -37,7 +39,10 @@ const RecentlyAddedProducts = () => {
           </h2>
           <div className="grid md:grid-cols-4 gap-3 mt-4">
             {firstTenRadomProducts.map((product) => (
-              <div key={product.id} className="border-[3px] rounded p-4 hover:border-baby-blue ">
+              <div
+                key={product.id}
+                className="border-[3px] rounded p-4 hover:border-baby-blue "
+              >
                 <Swiper>
                   {product.images.map((img, idx) => (
                     <SwiperSlide key={idx}>
@@ -86,6 +91,12 @@ const RecentlyAddedProducts = () => {
                 </div>
               </div>
             ))}
+
+            <div className="flex text-center items-center justify-center px-28">
+              <a className=" text-dark-simon font-bold text-2xl px-4 py-2">
+                <Link to={NavbarRoutes.ALL_PRODUCTS}>View All</Link>
+              </a>
+            </div>
           </div>
         </div>
       )}
@@ -93,4 +104,4 @@ const RecentlyAddedProducts = () => {
   );
 };
 
-export default RecentlyAddedProducts;
+export default RecentlyAddedSection;

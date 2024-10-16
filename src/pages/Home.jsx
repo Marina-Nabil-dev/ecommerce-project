@@ -1,11 +1,11 @@
 import React from 'react'
-import RecentlyAddedProducts from '../components/RecentlyAddedProducts'
 import PopularCategories from '../components/PopularCategories'
+import RecentlyAddedSection from '../components/Home/RecentlyAddedSection'
 
 export default function Home() {
   return (
     <div>
-      <RecentlyAddedProducts />
+      <RecentlyAddedSection />
       <PopularCategories />
     </div>
   )

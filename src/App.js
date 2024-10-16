@@ -13,6 +13,7 @@ import {
   QueryClientProvider,
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import AllProducts from './components/AllProducts';
 
 const queryClient = new QueryClient();
 function App() {
@@ -24,6 +25,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/products",
+          element : <AllProducts/>
         },
         {
           path: "*",

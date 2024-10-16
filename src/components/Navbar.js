@@ -62,7 +62,7 @@ const Navbar = () => {
             <Link
               className=" text-white font-semibold"
               role="menuitem"
-              to="/recently-added-products"
+              to="/products"
             >
               Products
             </Link>
