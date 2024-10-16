@@ -11,6 +11,8 @@ import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { NavbarRoutes } from "../../routes/navbarRoutes";
 const RecentlyAddedSection = () => {
+  const [recentlyAddedProducts, setRecentlyAddedProducts] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   function fetchProducts() {
     const response = getApiData(HomeRoutes.PRODUCTS);
     return response;
@@ -20,11 +22,15 @@ const RecentlyAddedSection = () => {
     fetchProducts,
     {
       staleTime: 1000 * 60 * 5, // Cache data for 5 minutes (300,000 ms)
-      cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused
+      cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused,
+      onSuccess: (data) => {
+        setRecentlyAddedProducts(data[0]);
+        setTotalCount(data[1]);
+      },
     }
   );
 
-  const firstTenRadomProducts = data
+  const firstTenRadomProducts = recentlyAddedProducts
     ?.sort(() => Math.random() - 0.5)
     .slice(0, 7);
 

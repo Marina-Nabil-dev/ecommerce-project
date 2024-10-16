@@ -5,6 +5,8 @@ import { useQuery } from "react-query";
 import Spinner from "./../icons/Spinner";
 
 const PopularCategories = () => {
+  const [categories, setCategories] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   function fetchCategories() {
     const response = getApiData(HomeRoutes.CATEGORIES);
     return response;
@@ -16,10 +18,14 @@ const PopularCategories = () => {
     {
       staleTime: 1000 * 60 * 5, // Cache data for 5 minutes (300,000 ms)
       cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused
-      refetchInterval: 1000 * 60 * 5, // Refetch data every 5 minutes
+      refetchInterval: 1000 * 60 * 5, // Refetch data every 5 minutes,
+      onSuccess: (data) => {
+        setCategories(data[0]);
+        setTotalCount(data[1]);
+      },
     }
   );
-  const firstFiveCategories = data?.slice(0, 5);
+  const firstFiveCategories = categories?.slice(0, 5);
 
 
   return (
