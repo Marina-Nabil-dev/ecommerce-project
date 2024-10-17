@@ -14,6 +14,7 @@ import {
 } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import AllProducts from './components/AllProducts';
+import ProductDetails from "./components/ProductDetails";
 
 const queryClient = new QueryClient();
 function App() {
@@ -29,6 +30,10 @@ function App() {
         {
           path: "/products",
           element : <AllProducts/>
+        },
+        {
+            path : "/product/:id",
+            element : <ProductDetails/>
         },
         {
           path: "*",
