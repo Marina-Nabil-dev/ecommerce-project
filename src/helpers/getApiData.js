@@ -12,13 +12,14 @@ export const getApiData = async (routeName) => {
     );
     
     const result = response.data.data;
-    const totalCount = response.data.results;
+    const totalCount = 'results' in response.data ? response.data.results : 0;    
     
     
-    if (typeof (result == Object)) {
+    if ('results' in response.data  && typeof (result === Object)) {      
 
       return [Object.values(result), totalCount];
     }    
+    
     return [result, totalCount];
   } catch (error) {
     throw error; // Re-throw the error for handling in the calling component
