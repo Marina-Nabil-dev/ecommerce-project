@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
@@ -10,9 +10,9 @@ import Spinner from "../icons/Spinner";
 import { useQuery } from "react-query";
 import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
+import { CartContext } from "../contexts/cartContext";
 const AllProducts = () => {
   function fetchProducts(queryData) {
-
     const response = getApiData(
       `${NavbarRoutes.ALL_PRODUCTS}?page=${queryData.queryKey[1]}&limit=${queryData.queryKey[2]}`
     );
@@ -24,6 +24,7 @@ const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
+  const { addCart } = useContext(CartContext);
 
   let { isLoading, isFetching, error, data, refetch } = useQuery(
     ["products", currentPage, limit],
@@ -71,31 +72,31 @@ const AllProducts = () => {
           </form>
           <div className="grid md:grid-cols-4 gap-3 mt-4">
             {products.map((product) => (
-              <Link to={`/product/${product.id}`}>
-                <div
-                  key={product.id}
-                  className="border-[3px] rounded p-4 hover:border-baby-blue "
-                >
-                  <Swiper>
-                    {product.images.map((img, idx) => (
-                      <SwiperSlide key={idx}>
-                        <img
-                          src={img}
-                          alt={product.slug}
-                          className="mx-auto size-64"
-                        />
-                      </SwiperSlide>
-                    ))}
-                  </Swiper>
-                  <div className="block my-2">
-                    <h2 className="text-left font-bold text-green-600">
-                      {product.category.name}
-                    </h2>
-                    <h3 className="text-left">
-                      {product.title.length > 30
-                        ? product.title.slice(0, 30) + "..."
-                        : product.title}
-                    </h3>
+              <div
+                key={product.id}
+                className="border-[3px] rounded p-4 hover:border-baby-blue "
+              >
+                <Swiper>
+                  {product.images.map((img, idx) => (
+                    <SwiperSlide key={idx}>
+                      <img
+                        src={img}
+                        alt={product.slug}
+                        className="mx-auto size-64"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                <div className="block my-2">
+                  <h2 className="text-left font-bold text-green-600">
+                    {product.category.name}
+                  </h2>
+                  <h3 className="text-left">
+                    {product.title.length > 30
+                      ? product.title.slice(0, 30) + "..."
+                      : product.title}
+                  </h3>
+                  <Link to={`/product/${product.id}`}>
                     <div className=" flex text-baby-purple font-bold">
                       <span>{product.price} EGP</span>
                       <span className="flex text-baby-purple ml-auto">
@@ -116,14 +117,14 @@ const AllProducts = () => {
                         <span className="px-1">{product.ratingsAverage}</span>
                       </span>
                     </div>
-                    <div className="flex my-2 items-center justify-center">
-                      <button className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded">
-                        Add To Cart
-                      </button>
-                    </div>
+                  </Link>
+                  <div className="flex my-2 items-center justify-center">
+                    <button onClick={()=> {addCart(product.id)}} className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded">
+                      Add To Cart
+                    </button>
                   </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
           <div className="flex justify-center mt-4">

@@ -39,7 +39,7 @@ const RegisterModal = ({ closeModal, showImage }) => {
     setUser(values);
     setErrors({});
     
-      const response = await postApiData(AuthRoutes.REGISTER, values); // Use 'values' instead of 'user' here
+      const response = await postApiData(AuthRoutes.REGISTER, values, {}); // Use 'values' instead of 'user' here
       const { status, message, data } = response;
       if (status === 200) {
         closeModal();

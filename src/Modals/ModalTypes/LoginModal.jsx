@@ -35,7 +35,7 @@ const LoginModal = ({ closeModal, showImage }) => {
     setMessage("");
     setErrors({});
 
-    const response = await postApiData(AuthRoutes.LOGIN, values);
+    const response = await postApiData(AuthRoutes.LOGIN, values, {});
 
     const { status, message, data } = response;
     if (status === 200) {

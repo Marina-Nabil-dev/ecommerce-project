@@ -4,13 +4,21 @@ import ModalComponent from "./../Modals/ModalComponent";
 import { UserContext } from "../contexts/userContext";
 import { Link } from "react-router-dom";
 import GuardRouting from "../helpers/GuardRouting";
+import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { BiLogOutCircle } from "react-icons/bi";
+import { CartContext } from "../contexts/cartContext";
 
 const Navbar = () => {
   const inputRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   let { userToken } = useContext(UserContext);
+  const modalRef = useRef();
+  const {itemsCount} = useContext(CartContext);
+  console.log(itemsCount);
+  
 
   if (!userToken) {
     userToken = localStorage.getItem("userToken");
@@ -31,6 +39,7 @@ const Navbar = () => {
     setIsModalOpen(false);
     setModalType("");
   };
+  const closeAccountModal = () => setAccountIsOpen(false);  
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -77,16 +86,6 @@ const Navbar = () => {
               Brands
             </Link>
           </GuardRouting>
-
-          <GuardRouting>
-            <Link
-              className=" text-white font-semibold"
-              role="menuitem"
-              to="/cart"
-            >
-              Cart
-            </Link>
-          </GuardRouting>
         </div>
         <div className="flex w-1/3 p-[8px_10px] mx-2 gap-2 self-stretch border-2 rounded-md">
           <form className="w-full" onSubmit={handleSubmittingForm}>
@@ -114,22 +113,63 @@ const Navbar = () => {
             </button>
           </div>
         ) : (
-          <button
-            className="text-white border rounded-full px-4 py-2 bg-simon  hover:bg-dark-simon"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        )}
+          <>
+            <div className="relative" ref={modalRef}>
+              <button
+                className="flex items-center space-x-2 text-white focus:outline-none"
+                onClick={() => setAccountIsOpen((prev) => !prev)}
+              >
+                <UserCircleIcon className="h-6 w-6" />
+                <span className="pl-1">Account</span>
+              </button>
+            </div>
+            {accountIsOpen && (
+              <>
+                <div
+                  className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                  onClick={closeAccountModal}
+                ></div>
+                <div
+                  className={`fixed top-8 right-2 h-1/2 w-64 bg-white shadow-lg rounded-lg transform transition-transform duration-300 z-50 ${
+                    accountIsOpen ? "translate-x-0" : "translate-x-full"
+                  }`}
+                >
+                  <div className="p-6">
+                    <h2 className="text-lg font-bold mb-4">Account</h2>
 
-        {/* Mobile menu */}
-        {isOpen && (
-          <div className="absolute right-0 top-0 bg-baby-purple h-screen w-2/3 flex flex-col items-center">
-            <button className="text-white my-4">Login</button>
-            <button className=" bg-white font-bold text-baby-purple px-4 py-2 rounded-full">
-              Sell Your Product
-            </button>
-          </div>
+                    <a
+                      href="#profile"
+                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      <UserCircleIcon className="h-5 w-5 mr-2" />
+                      <span>Profile</span>
+                    </a>
+                    <Link to="/your-cart">
+                      <span className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                        
+                        Cart
+                        <span className="inline-flex items-center justify-center px-2 py-1 mx-2 text-xs font-bold leading-none text-white bg-simon rounded-full">
+                        {
+                          itemsCount
+                        }
+                      </span>
+                    
+                      </span>
+                      
+                    </Link>
+                    <a
+                      href="#logout"
+                      className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    >
+                      <BiLogOutCircle className="h-5 w-5 mr-2" />
+                      <span onClick={handleLogout}>Logout</span>
+                    </a>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
         )}
       </nav>
       {isModalOpen && (

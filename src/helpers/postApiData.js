@@ -1,16 +1,17 @@
 import axios from "axios";
-export const postApiData = async (routeName, data) => {
+export const postApiData = async (routeName, data, headerObject) => {
   try {
     const headers = {
       "Accept-Language": "en",
       Accept: "application/json",
+      ...headerObject,
     };
 
     const response = await axios.post(
       process.env.REACT_APP_API_DEVELOP_URL + routeName,
       data,
       { headers }
-    );    
+    );
 
     return {
       status: response.status,
