@@ -33,7 +33,6 @@ const RegisterModal = ({ closeModal, showImage }) => {
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    console.log(values);
     
     setIsLoading(true);
     setUser(values);

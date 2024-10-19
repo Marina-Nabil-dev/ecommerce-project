@@ -12,7 +12,7 @@ const PopularCategories = () => {
     return response;
   }
 
-  let { isLoading, isFetching, error, data } = useQuery(
+  let { isLoading, isFetching, error, data , refetch} = useQuery(
     "categories",
     fetchCategories,
     {
@@ -26,6 +26,10 @@ const PopularCategories = () => {
     }
   );
   const firstFiveCategories = categories?.slice(0, 5);
+
+  useEffect(() => {
+    refetch();
+  }, [firstFiveCategories.length == 0]);
 
 
   return (

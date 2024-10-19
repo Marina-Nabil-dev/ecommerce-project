@@ -12,6 +12,13 @@ import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
 import { CartContext } from "../contexts/cartContext";
 const AllProducts = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [products, setProducts] = useState([]);
+  const limit = 8; // Items per page
+  const inputRef = useRef(null);
+  const { addCart } = useContext(CartContext);
+
   function fetchProducts(queryData) {
     const response = getApiData(
       `${NavbarRoutes.ALL_PRODUCTS}?page=${queryData.queryKey[1]}&limit=${queryData.queryKey[2]}`
@@ -19,12 +26,6 @@ const AllProducts = () => {
 
     return response;
   }
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [products, setProducts] = useState([]);
-  const limit = 8; // Items per page
-  const inputRef = useRef(null);
-  const { addCart } = useContext(CartContext);
 
   let { isLoading, isFetching, error, data, refetch } = useQuery(
     ["products", currentPage, limit],
@@ -119,7 +120,10 @@ const AllProducts = () => {
                     </div>
                   </Link>
                   <div className="flex my-2 items-center justify-center">
-                    <button onClick={()=> {addCart(product.id)}} className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded">
+                    <button
+                      onClick={() => addCart(product.id)}
+                      className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
+                    >
                       Add To Cart
                     </button>
                   </div>

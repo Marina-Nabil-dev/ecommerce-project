@@ -16,9 +16,7 @@ const Navbar = () => {
   const [modalType, setModalType] = useState("");
   let { userToken } = useContext(UserContext);
   const modalRef = useRef();
-  const {itemsCount} = useContext(CartContext);
-  console.log(itemsCount);
-  
+  const { itemsCount } = useContext(CartContext);
 
   if (!userToken) {
     userToken = localStorage.getItem("userToken");
@@ -31,7 +29,6 @@ const Navbar = () => {
 
   const handleSubmittingForm = (e) => {
     e.preventDefault();
-    console.log(inputRef.current.value);
     inputRef.current.value = "";
   };
 
@@ -39,7 +36,7 @@ const Navbar = () => {
     setIsModalOpen(false);
     setModalType("");
   };
-  const closeAccountModal = () => setAccountIsOpen(false);  
+  const closeAccountModal = () => setAccountIsOpen(false);
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
@@ -114,7 +111,35 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <div className="relative" ref={modalRef}>
+            <div>
+              <ul className="inline-flex text-white ">
+                <li className="">
+                  <a href="#profile" className="flex items-center px-4 py-2 ">
+                    <UserCircleIcon className="h-5 w-5 mr-2" />
+                  </a>
+                </li>
+                <li>
+                  <Link to="/your-cart">
+                    <span className="flex items-center px-4 py-2 ">
+                      <ShoppingCartIcon className="h-5 w-5 mr-2" />
+                      <span className="relative bottom-4 right-3 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-simon rounded-full">
+                        {itemsCount}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+                <li>
+                  <a href="#"
+                    onClick={handleLogout}
+                    className="flex items-center px-2 py-2"
+                  >
+                    <BiLogOutCircle className="h-5 w-5 mr-2" />
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+            {/* <div className="relative" ref={modalRef}>
               <button
                 className="flex items-center space-x-2 text-white focus:outline-none"
                 onClick={() => setAccountIsOpen((prev) => !prev)}
@@ -168,7 +193,7 @@ const Navbar = () => {
                   </div>
                 </div>
               </>
-            )}
+            )} */}
           </>
         )}
       </nav>

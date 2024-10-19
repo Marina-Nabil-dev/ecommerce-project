@@ -14,6 +14,8 @@ import AllProducts from "./components/AllProducts";
 import ProductDetails from "./components/ProductDetails";
 import { CartContextProvider } from "./contexts/cartContext";
 import Cart from "./components/Cart";
+import { Toaster } from "react-hot-toast";
+
 
 const queryClient = new QueryClient();
 function App() {
@@ -53,6 +55,7 @@ function App() {
       <CartContextProvider>
         <UserContextProvider>
           <RouterProvider router={router}></RouterProvider>
+          <Toaster position="top-right" reverseOrder={false} />
         </UserContextProvider>
       </CartContextProvider>
       {/* </ReactQueryDevtools> */}

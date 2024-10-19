@@ -1,5 +1,5 @@
 import axios from "axios";
-export const postApiData = async (routeName, data, headerObject) => {
+export const postApiData = async (routeName, data, headerObject={}) => {
   try {
     const headers = {
       "Accept-Language": "en",

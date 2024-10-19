@@ -7,15 +7,12 @@ export const CartContext = createContext();
 export function CartContextProvider({ children }) {
     const [itemsCount , setItemNumber] = useState(0)
  async function addCart(productId) {
-    console.log(productId);
     
     let body = {
       productId: productId,
     };
 
-    let token = localStorage.getItem("userToken");
-    console.log(token);
-    
+    let token = localStorage.getItem("userToken");    
 
     const {status , message , data} = await postApiData(CartRoutes.ADD_TO_CART, body, { token: token });
     
