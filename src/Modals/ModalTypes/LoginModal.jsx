@@ -8,12 +8,17 @@ import ModalComponent from './../ModalComponent';
 import GoogleRegisterButton from './../../components/Forms/Fields/GoogleRegisterButton';
 import LoadingButton from './../../components/Forms/Fields/LoadingButton';
 import { postApiData } from '../../helpers/postApiData';
-import { UserContext } from "../../contexts/userContext";
+import toast from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+import { setToken } from '../../redux/Reducers/userReducer'; // Import the setToken action
 
 const LoginModal = ({ closeModal, showImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const { userToken, setUserToken } = useContext(UserContext);
+  const { userToken, setUserToken } = useState(null);
+  
+  const dispatch = useDispatch();
+
 
   const openModal = (type) => {
     setModalType(type);
@@ -41,12 +46,14 @@ const LoginModal = ({ closeModal, showImage }) => {
     if (status === 200) {
       // closeModal();      
       localStorage.setItem("userToken", data.token);
-      setUserToken(data.token);
+      dispatch(setToken(data.token));
+      toast.success(message);
       closeModal();
     }
     if (status == 422) {
       setErrors(data);
       setMessage(message);
+      toast.error(message);
     }
 
     setIsLoading(false);

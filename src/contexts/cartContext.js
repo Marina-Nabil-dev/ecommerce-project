@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { postApiData } from "./../helpers/postApiData";
 import { CartRoutes } from "../routes/cartRoutes";
+import toast from "react-hot-toast";
 
 export const CartContext = createContext();
 
@@ -19,6 +20,18 @@ export function CartContextProvider({ children }) {
     if(status === 200)
     {        
         setItemNumber(data.numOfCartItems)
+        toast.success(message, {
+          duration: 5000,
+          position: 'top-right',
+          icon: '🛒',
+          iconTheme: {
+            primary: 'green',
+            secondary: 'white',
+          },
+          style: {
+            color: 'green',
+          },
+        })
     }
 
   }

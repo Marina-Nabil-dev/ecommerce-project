@@ -1,6 +1,5 @@
 import axios from "axios";
 export const getApiData = async (routeName, headerObjects = {}) => {
-  console.log(headerObjects);
 
   try {
     const headers = {

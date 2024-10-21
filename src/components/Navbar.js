@@ -6,7 +6,16 @@ import { Link } from "react-router-dom";
 import GuardRouting from "../helpers/GuardRouting";
 import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { BiLogOutCircle } from "react-icons/bi";
-import { CartContext } from "../contexts/cartContext";
+// import { CartContext } from "../contexts/cartContext";
+
+import { useDispatch, useSelector } from "react-redux";
+import { setToken,clearToken } from "../redux/Reducers/userReducer";
+
+import { postApiData } from "../helpers/postApiData";
+import { AuthRoutes } from "../routes/authRoutes";
+import toast from "react-hot-toast";
+
+
 
 const Navbar = () => {
   const inputRef = useRef(null);
@@ -14,12 +23,16 @@ const Navbar = () => {
   const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  let { userToken } = useContext(UserContext);
   const modalRef = useRef();
-  const { itemsCount } = useContext(CartContext);
+  // const { itemsCount } = useContext(CartContext);
+  const dispatch = useDispatch();  
 
-  if (!userToken) {
-    userToken = localStorage.getItem("userToken");
+  const { userToken } = useSelector((state) => state.user);
+  
+
+  if (!userToken) {    
+    dispatch(setToken(localStorage.getItem("userToken")));
+    
   }
 
   const openModal = (type) => {
@@ -39,8 +52,11 @@ const Navbar = () => {
   const closeAccountModal = () => setAccountIsOpen(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("userToken");
-    window.location.reload();
+    dispatch(clearToken());
+    console.log(userToken);
+    
+    toast.success("Logout Successful");
+    // window.location.reload();
   };
   return (
     <>
@@ -96,7 +112,7 @@ const Navbar = () => {
             />
           </form>
         </div>
-        {userToken == null ? (
+        {userToken === null ? (
           <div className="hidden md:flex space-x-4">
             <button
               className="text-white border rounded-full px-4 py-2 bg-simon hover:bg-dark-simon"
@@ -123,13 +139,14 @@ const Navbar = () => {
                     <span className="flex items-center px-4 py-2 ">
                       <ShoppingCartIcon className="h-5 w-5 mr-2" />
                       <span className="relative bottom-4 right-3 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-simon rounded-full">
-                        {itemsCount}
+                        {/* {itemsCount} */}
                       </span>
                     </span>
                   </Link>
                 </li>
                 <li>
-                  <a href="#"
+                  <a
+                    href="#"
                     onClick={handleLogout}
                     className="flex items-center px-2 py-2"
                   >

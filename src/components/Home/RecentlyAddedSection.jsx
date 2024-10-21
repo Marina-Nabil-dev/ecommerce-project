@@ -10,11 +10,11 @@ import Spinner from "../../icons/Spinner";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { NavbarRoutes } from "../../routes/navbarRoutes";
-import { CartContext } from "../../contexts/cartContext";
+// import { CartContext } from "../../contexts/cartContext";
 const RecentlyAddedSection = () => {
   const [recentlyAddedProducts, setRecentlyAddedProducts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const { addCart } = useContext(CartContext);
+  // const { addCart } = useContext(CartContext);
   function fetchProducts() {
     const response = getApiData(HomeRoutes.PRODUCTS);
     return response;
@@ -99,7 +99,6 @@ const RecentlyAddedSection = () => {
                   </div>
                   <div className="flex my-2 items-center justify-center">
                     <button
-                      onClick={() => addCart(product.id)}
                       className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
                     >
                       Add To Cart

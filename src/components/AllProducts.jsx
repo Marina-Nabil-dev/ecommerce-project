@@ -10,14 +10,14 @@ import Spinner from "../icons/Spinner";
 import { useQuery } from "react-query";
 import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
-import { CartContext } from "../contexts/cartContext";
+// import { CartContext } from "../contexts/cartContext";
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [products, setProducts] = useState([]);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
-  const { addCart } = useContext(CartContext);
+  // const { addCart } = useContext(CartContext);
 
   function fetchProducts(queryData) {
     const response = getApiData(
@@ -121,7 +121,7 @@ const AllProducts = () => {
                   </Link>
                   <div className="flex my-2 items-center justify-center">
                     <button
-                      onClick={() => addCart(product.id)}
+                     
                       className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
                     >
                       Add To Cart

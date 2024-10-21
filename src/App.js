@@ -15,6 +15,8 @@ import ProductDetails from "./components/ProductDetails";
 import { CartContextProvider } from "./contexts/cartContext";
 import Cart from "./components/Cart";
 import { Toaster } from "react-hot-toast";
+import { Provider } from "react-redux";
+import { ConfigStore } from "./redux/store";
 
 
 const queryClient = new QueryClient();
@@ -51,14 +53,18 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <ReactQueryDevtools initialIsOpen={false} > */}
-      <CartContextProvider>
-        <UserContextProvider>
+      <Provider store={ConfigStore}>
           <RouterProvider router={router}></RouterProvider>
-          <Toaster position="top-right" reverseOrder={false} />
-        </UserContextProvider>
-      </CartContextProvider>
-      {/* </ReactQueryDevtools> */}
+          <Toaster position="top-right" reverseOrder={false} 
+          toastOptions={{
+            success: {
+              style: {
+                color: 'green',
+                backgroundColor: 'white',
+              },
+            },
+          }} />
+      </Provider>
     </QueryClientProvider>
   );
 }
