@@ -30,11 +30,6 @@ const Navbar = () => {
   const { userToken } = useSelector((state) => state.user);
   
 
-  if (!userToken) {    
-    dispatch(setToken(localStorage.getItem("userToken")));
-    
-  }
-
   const openModal = (type) => {
     setModalType(type);
     setIsModalOpen(true);
