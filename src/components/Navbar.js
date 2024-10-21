@@ -47,9 +47,7 @@ const Navbar = () => {
   const closeAccountModal = () => setAccountIsOpen(false);
 
   const handleLogout = () => {
-    dispatch(clearToken());
-    console.log(userToken);
-    
+    dispatch(clearToken());    
     toast.success("Logout Successful");
     // window.location.reload();
   };

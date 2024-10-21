@@ -55,7 +55,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Provider store={ConfigStore}>
           <RouterProvider router={router}></RouterProvider>
-          <Toaster position="top-right" reverseOrder={false} 
+          <Toaster position="middle-right" reverseOrder={false} 
           toastOptions={{
             success: {
               style: {
