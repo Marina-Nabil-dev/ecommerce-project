@@ -27,8 +27,10 @@ const RecentlyAddedSection = () => {
       cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused,
       
       onSuccess: (data) => {
-        setRecentlyAddedProducts(data[0]);
-        setTotalCount(data[1]);
+        const [totalCount, currentPage ,products] = data;
+        
+        setRecentlyAddedProducts(products);
+        setTotalCount(totalCount);
       },
     }
   );
@@ -36,12 +38,7 @@ const RecentlyAddedSection = () => {
   const firstTenRadomProducts = recentlyAddedProducts
     ?.sort(() => Math.random() - 0.5)
     .slice(0, 7);
-   
-    useEffect(()=> {
-      refetch();
-    }, firstTenRadomProducts.length == 0)
-    
-
+  
   return (
     <>
       {isLoading ? (

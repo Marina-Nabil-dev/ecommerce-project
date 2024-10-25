@@ -10,14 +10,19 @@ import Spinner from "../icons/Spinner";
 import { useQuery } from "react-query";
 import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
-// import { CartContext } from "../contexts/cartContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addCart } from "../redux/Reducers/cartReducer";
+
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [products, setProducts] = useState([]);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
-  // const { addCart } = useContext(CartContext);
+  const dispatch = useDispatch();
+  const { loading, errors, itemNumber } = useSelector((state) => state.cart);
+  
+
 
   function fetchProducts(queryData) {
     const response = getApiData(
@@ -35,11 +40,16 @@ const AllProducts = () => {
       cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused
       keepPreviousData: true, // Keep previous data when refetching
       onSuccess: (data) => {
-        setProducts(data[0]);
-        setTotalCount(data[1]);
+        const [totalCount, currentPage ,products] = data;
+
+        setProducts(products);
       },
     }
   );
+
+  function addToCart(product) {
+    dispatch(addCart(product));
+  }
 
   useEffect(() => {
     refetch();
@@ -121,7 +131,7 @@ const AllProducts = () => {
                   </Link>
                   <div className="flex my-2 items-center justify-center">
                     <button
-                     
+                    onClick={() => dispatch(addCart(product.id))}
                       className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
                     >
                       Add To Cart

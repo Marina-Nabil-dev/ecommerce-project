@@ -3,35 +3,17 @@ import { CartRoutes } from "./../routes/cartRoutes";
 import { getApiData } from "../helpers/getApiData";
 import { useQuery } from "react-query";
 import Spinner from "../icons/Spinner";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
+
   const [totalPrice, setTotalPrice] = useState(0);
-  const userToken = localStorage.getItem("userToken");
-  function userCart() {
-    const response = getApiData(CartRoutes.USER_CART, { token: userToken });
-    return response;
-  }
+  const dispatch = useDispatch();
 
-  let { isLoading, isFetching, error, refetch } = useQuery("user-cart", userCart, {
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
-    refetchInterval: 1000 * 60 * 5,
-    onSuccess: (data) => {
-      console.log(data);
-
-      setCartItems(data[0].products);
-      setItemCount(data[1]);
-      setTotalPrice(data[0].totalCartPrice);
-    },
-  });
-  useEffect(() => {
-    refetch();
-  }, [cartItems.length == 0]);
+  const {loading , cartList} = useSelector((state) => state.cart);
   return (
     <>
-      {isLoading ? (
+      {loading ? (
         <Spinner />
       ) : (
         <div className="bg-gray-100 min-h-screen p-10">
@@ -49,7 +31,7 @@ export default function Cart() {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartItems.map((item) => (
+                  {cartList.map((item) => (
                     <tr key={item._id} className="border-b">
                       <td className="py-4 flex items-center space-x-4">
                         <img

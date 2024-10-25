@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userToken: null,
-  // userData: null,
 };
 // Create a slice for user with reducers
 const userSlice = createSlice({
@@ -12,7 +11,6 @@ const userSlice = createSlice({
     setToken: (state, action) => {      
       state.userToken = action.payload;
       localStorage.setItem("userToken", action.payload);
-      // state.userData = jwtDecode(action.payload);
     },
     clearToken: (state) => {
       localStorage.removeItem("userToken");

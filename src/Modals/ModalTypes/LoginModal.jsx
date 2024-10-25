@@ -15,7 +15,6 @@ import { setToken } from '../../redux/Reducers/userReducer'; // Import the setTo
 const LoginModal = ({ closeModal, showImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const { userToken, setUserToken } = useState(null);
   
   const dispatch = useDispatch();
 

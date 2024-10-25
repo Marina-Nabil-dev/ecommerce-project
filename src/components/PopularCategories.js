@@ -20,8 +20,10 @@ const PopularCategories = () => {
       cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused
       refetchInterval: 1000 * 60 * 5, // Refetch data every 5 minutes,
       onSuccess: (data) => {
-        setCategories(data[0]);
-        setTotalCount(data[1]);
+        const [totalCount, currentPage ,categories] = data;
+        
+        setCategories(categories);
+        // setTotalCount(data);
       },
     }
   );

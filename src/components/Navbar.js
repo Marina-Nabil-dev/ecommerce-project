@@ -1,20 +1,13 @@
 import React, { useContext, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
-import { UserContext } from "../contexts/userContext";
 import { Link } from "react-router-dom";
 import GuardRouting from "../helpers/GuardRouting";
 import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { BiLogOutCircle } from "react-icons/bi";
-// import { CartContext } from "../contexts/cartContext";
-
 import { useDispatch, useSelector } from "react-redux";
-import { setToken,clearToken } from "../redux/Reducers/userReducer";
-
-import { postApiData } from "../helpers/postApiData";
-import { AuthRoutes } from "../routes/authRoutes";
+import { clearToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
-
 
 
 const Navbar = () => {
@@ -23,12 +16,12 @@ const Navbar = () => {
   const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const modalRef = useRef();
-  // const { itemsCount } = useContext(CartContext);
+  const modalRef = useRef();  
   const dispatch = useDispatch();  
 
   const { userToken } = useSelector((state) => state.user);
   
+
 
   const openModal = (type) => {
     setModalType(type);

@@ -1,6 +1,5 @@
 import axios from "axios";
 export const getApiData = async (routeName, headerObjects = {}) => {
-
   try {
     const headers = {
       "Accept-Language": "en",
@@ -12,21 +11,15 @@ export const getApiData = async (routeName, headerObjects = {}) => {
       process.env.REACT_APP_API_DEVELOP_URL + routeName,
       { headers }
     );
-    let totalCount = 0;
 
-    const result = response.data.data;
-    if ("results" in response.data) {
-      totalCount = response.data.results;
-    }
-    if ("numOfCartItems" in response.data) {
-      totalCount = response.data.numOfCartItems;
+    const result = response.data;
+    
+
+    if (typeof (result === Object)) {
+      return Object.values(result);
     }
 
-    if ("results" in response.data && typeof (result === Object)) {
-      return [Object.values(result), totalCount];
-    }
-
-    return [result, totalCount];
+    return result;
   } catch (error) {
     throw error; // Re-throw the error for handling in the calling component
   }
