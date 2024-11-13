@@ -45,12 +45,24 @@ export const addCart = createAsyncThunk(
 
 export const getUserCart = createAsyncThunk("cart/getUserCart", async () => {
   const token = localStorage.getItem("userToken");
-  const [data, itemCount] = await getApiData(CartRoutes.USER_CART, {
+  if (token) {
+    return {
+      cartList: [],
+      itemNumber: 0,
+    };
+  }
+  const [status, itemCount , id , data] = await getApiData(CartRoutes.USER_CART, {
     token,
   });
 
-  if (data.status === "success") {
-    return [data.data.products, itemCount];
+  console.log(data);
+
+  if (status === "success") {
+    
+    return {
+      cartList: data.products,
+      itemNumber: itemCount,
+    };
   }
 });
 
@@ -69,16 +81,18 @@ const cartSlice = createSlice({
     });
     builder.addCase(addCart.rejected, function () {});
 
-    builder.addCase(getUserCart.pending, function (state, action) {
-      state.loading = true;
-      state.errors = null;
-    });
-    builder.addCase(getUserCart.fulfilled, function (state, action) {
-      state.cartList = action.payload[0];
-      state.itemNumber = action.payload[1];
-      state.loading = false;
-    });
-    builder.addCase(getUserCart.rejected, function () {});
+    builder
+      .addCase(getUserCart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getUserCart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cartList = action.payload.cartList;
+        state.itemNumber = action.payload.itemCount;
+      })
+      .addCase(getUserCart.rejected, (state) => {
+        state.status = "failed";
+      });
   },
 });
 

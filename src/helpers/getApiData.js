@@ -14,6 +14,7 @@ export const getApiData = async (routeName, headerObjects = {}) => {
 
     const result = response.data;
     
+    
 
     if (typeof (result === Object)) {
       return Object.values(result);

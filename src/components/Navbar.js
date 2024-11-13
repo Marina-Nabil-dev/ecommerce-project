@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import { BiLogOutCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
+import { getUserCart } from "../redux/Reducers/cartReducer";
 
 
 const Navbar = () => {
@@ -17,9 +18,22 @@ const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
   const modalRef = useRef();  
+
   const dispatch = useDispatch();  
 
-  const { userToken } = useSelector((state) => state.user);
+  const { userToken } = useSelector((state) => state.user); 
+  const itemNumber = useSelector((state) => state.cart.itemNumber);
+
+  useEffect(() => {
+    // Dispatch getUserCart if the token is present
+    if (userToken) {      
+      dispatch(getUserCart());
+      console.log(itemNumber);
+      
+    }
+  }, [dispatch, userToken]);
+  
+  
   
 
 
@@ -125,7 +139,7 @@ const Navbar = () => {
                     <span className="flex items-center px-4 py-2 ">
                       <ShoppingCartIcon className="h-5 w-5 mr-2" />
                       <span className="relative bottom-4 right-3 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-simon rounded-full">
-                        {/* {itemsCount} */}
+                        {itemNumber}
                       </span>
                     </span>
                   </Link>

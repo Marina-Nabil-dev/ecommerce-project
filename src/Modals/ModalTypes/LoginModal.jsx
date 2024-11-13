@@ -28,11 +28,7 @@ const LoginModal = ({ closeModal, showImage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
-  // const [credentials, setCredentials] = useState({
-  //   mobile_number: "",
-  //   password: "",
-  //   dial_code: "+20",
-  // });
+ 
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setIsLoading(true);
@@ -43,10 +39,12 @@ const LoginModal = ({ closeModal, showImage }) => {
 
     const { status, message, data } = response;
     if (status === 200) {
-      // closeModal();      
       localStorage.setItem("userToken", data.token);
+
       dispatch(setToken(data.token));
+      
       toast.success(message);
+
       closeModal();
     }
     if (status == 422) {
