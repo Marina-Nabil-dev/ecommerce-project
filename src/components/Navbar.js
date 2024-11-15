@@ -10,31 +10,32 @@ import { clearToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
 import { getUserCart } from "../redux/Reducers/cartReducer";
 
-
 const Navbar = () => {
   const inputRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const modalRef = useRef();  
+  const modalRef = useRef();
 
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
 
-  const { userToken } = useSelector((state) => state.user); 
-  const itemNumber = useSelector((state) => state.cart.itemNumber);
+  const { userToken } = useSelector((state) => state.user);
+  const {itemNumber, cartList} = useSelector((state) => state.cart);
+
 
   useEffect(() => {
     // Dispatch getUserCart if the token is present
-    if (userToken) {      
+    if (userToken) {
       dispatch(getUserCart());
-      console.log(itemNumber);
-      
     }
-  }, [dispatch, userToken]);
-  
-  
-  
+  }, [itemNumber ==0, userToken]);
+
+  // useEffect(() => {
+  //   // Log itemNumber each time it updates
+  //   if (itemNumber !== undefined) {
+  //   }
+  // }, [itemNumber]);
 
 
   const openModal = (type) => {
@@ -54,7 +55,7 @@ const Navbar = () => {
   const closeAccountModal = () => setAccountIsOpen(false);
 
   const handleLogout = () => {
-    dispatch(clearToken());    
+    dispatch(clearToken());
     toast.success("Logout Successful");
     // window.location.reload();
   };

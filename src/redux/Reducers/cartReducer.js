@@ -45,23 +45,20 @@ export const addCart = createAsyncThunk(
 
 export const getUserCart = createAsyncThunk("cart/getUserCart", async () => {
   const token = localStorage.getItem("userToken");
-  if (token) {
+  if (!token) {
     return {
       cartList: [],
       itemNumber: 0,
     };
   }
-  const [status, itemCount , id , data] = await getApiData(CartRoutes.USER_CART, {
+  const  [status , itemCount  , id,data] = await getApiData(CartRoutes.USER_CART, {
     token,
-  });
-
-  console.log(data);
-
-  if (status === "success") {
-    
+  });  
+  if (status === "success") {   
     return {
       cartList: data.products,
-      itemNumber: itemCount,
+      itemNumber: itemCount
+
     };
   }
 });
@@ -74,7 +71,7 @@ const cartSlice = createSlice({
       state.loading = true;
       state.errors = null;
     });
-    builder.addCase(addCart.fulfilled, function (state, action) {
+    builder.addCase(addCart.fulfilled, function (state, action) {      
       state.cartList = action.payload[0];
       state.itemNumber = action.payload[1];
       state.loading = false;
@@ -88,7 +85,7 @@ const cartSlice = createSlice({
       .addCase(getUserCart.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.cartList = action.payload.cartList;
-        state.itemNumber = action.payload.itemCount;
+        state.itemNumber = action.payload.itemNumber;
       })
       .addCase(getUserCart.rejected, (state) => {
         state.status = "failed";
