@@ -6,7 +6,7 @@ import GuardRouting from "../helpers/GuardRouting";
 import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { BiLogOutCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
-import { clearToken } from "../redux/Reducers/userReducer";
+import { clearToken, verifyToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
 import { getUserCart } from "../redux/Reducers/cartReducer";
 
@@ -20,23 +20,20 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
 
-  const { userToken } = useSelector((state) => state.user);
-  const {itemNumber, cartList} = useSelector((state) => state.cart);
+  const { userToken, isAuthenticated } = useSelector((state) => state.user);
+  const { itemNumber } = useSelector((state) => state.cart);  
+  
+
+  useEffect(() => {
+    if (userToken && !isAuthenticated) {
+      dispatch(verifyToken(userToken));
+    }
+  }, [dispatch, isAuthenticated]);
 
 
   useEffect(() => {
-    // Dispatch getUserCart if the token is present
-    if (userToken) {
-      dispatch(getUserCart());
-    }
-  }, [itemNumber ==0, userToken]);
-
-  // useEffect(() => {
-  //   // Log itemNumber each time it updates
-  //   if (itemNumber !== undefined) {
-  //   }
-  // }, [itemNumber]);
-
+   dispatch(getUserCart())
+  }, [ isAuthenticated]);
 
   const openModal = (type) => {
     setModalType(type);
@@ -53,6 +50,8 @@ const Navbar = () => {
     setModalType("");
   };
   const closeAccountModal = () => setAccountIsOpen(false);
+
+
 
   const handleLogout = () => {
     dispatch(clearToken());
@@ -113,7 +112,7 @@ const Navbar = () => {
             />
           </form>
         </div>
-        {userToken === null ? (
+        {! isAuthenticated ? (
           <div className="hidden md:flex space-x-4">
             <button
               className="text-white border rounded-full px-4 py-2 bg-simon hover:bg-dark-simon"

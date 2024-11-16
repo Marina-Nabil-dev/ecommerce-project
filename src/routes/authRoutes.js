@@ -5,4 +5,5 @@ export const AuthRoutes = {
     FORGOT_PASSWORD: "forgot-password",
     RESET_PASSWORD: "reset-password",
     LOGOUT: "auth/logout",
+    VERIFY_TOKEN: "auth/verifyToken",
 }

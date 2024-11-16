@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { CartRoutes } from "./../routes/cartRoutes";
-import { getApiData } from "../helpers/getApiData";
-import { useQuery } from "react-query";
 import Spinner from "../icons/Spinner";
 import { useDispatch, useSelector } from "react-redux";
+import { removeItemFromCart } from "../redux/Reducers/cartReducer";
 
 export default function Cart() {
-
-  const [totalPrice, setTotalPrice] = useState(0);
   const dispatch = useDispatch();
 
-  const {loading , cartList} = useSelector((state) => state.cart);
+  const { loading, cartList, totalPrice } = useSelector((state) => state.cart);
+  function handlRemoveItem(itemId) {
+    dispatch(removeItemFromCart(itemId));
+  }
+
   return (
     <>
       {loading ? (
@@ -28,6 +28,7 @@ export default function Cart() {
                     <th className="pb-4">Price</th>
                     <th className="pb-4">Quantity</th>
                     <th className="pb-4">Subtotal</th>
+                    <th className="pb-4"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -48,17 +49,27 @@ export default function Cart() {
                       <td className="py-4">${item.price.toFixed(2)}</td>
                       <td className="py-4">
                         <div className="flex items-center">
-                          <button className="px-2 py-1 bg-gray-300 rounded">
+                          <button
+                            className="px-2 py-1 bg-gray-300 rounded"
+                            onClick={() => handlRemoveItem(item._id)}
+                          >
                             -
                           </button>
-                          <span className="mx-2 font-semibold">{item.count}</span>
+                          <span className="mx-2 font-semibold">
+                            {item.count}
+                          </span>
                           <button className="px-2 py-1 bg-gray-300 rounded">
                             +
                           </button>
                         </div>
                       </td>
                       <td className="py-4">
-                        EGP {(item.price * item.count).toFixed(2)}
+                      ${(item.price * item.count).toFixed(2)}
+                      </td>
+                      <td className="py-4">
+                      <button className="p-2 my-2 bg-dark-simon rounded-lg font-semibold text-white justify-end items-end">
+                          Remove
+                        </button>
                       </td>
                     </tr>
                   ))}
