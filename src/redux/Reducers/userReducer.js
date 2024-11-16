@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getApiData } from "../../helpers/getApiData";
 import { AuthRoutes } from "../../routes/authRoutes";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
-import { getUserCart } from "./cartReducer";
 
 const initialState = {
   userToken: localStorage.getItem("userToken") || null,
@@ -16,7 +14,7 @@ const initialState = {
 export const verifyToken = createAsyncThunk(
   "user/verifyToken",
   async (token) => {
-      const [message, data] = await getApiData(AuthRoutes.VERIFY_TOKEN, {
+      const [message] = await getApiData(AuthRoutes.VERIFY_TOKEN, {
         token,
       });
 

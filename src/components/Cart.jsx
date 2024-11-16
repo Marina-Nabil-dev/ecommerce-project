@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Spinner from "../icons/Spinner";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItemFromCart } from "../redux/Reducers/cartReducer";
+import { clearCart, removeItemFromCart } from "../redux/Reducers/cartReducer";
 
 export default function Cart() {
   const dispatch = useDispatch();
 
-  const { loading, cartList, totalPrice } = useSelector((state) => state.cart);
+  const { loading, cartList, totalPrice, buttonLoading } = useSelector((state) => state.cart);
   function handlRemoveItem(itemId) {
     dispatch(removeItemFromCart(itemId));
+  }
+
+  function handleClearCart() {    
+    dispatch(clearCart());
   }
 
   return (
@@ -21,6 +25,17 @@ export default function Cart() {
             {/* Cart Items Section */}
             <div className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg">
               <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
+
+              <div className="flex justify-end mb-4">
+              
+                <button
+                  className="p-2 rounded-lg bg-baby-green text-white font-semibold"
+                  onClick={() => handleClearCart()}
+                >
+                  Clear Cart
+                </button>
+              </div>
+
               <table className="w-full">
                 <thead>
                   <tr className="text-left text-gray-600">
@@ -51,7 +66,6 @@ export default function Cart() {
                         <div className="flex items-center">
                           <button
                             className="px-2 py-1 bg-gray-300 rounded"
-                            onClick={() => handlRemoveItem(item._id)}
                           >
                             -
                           </button>
@@ -64,10 +78,11 @@ export default function Cart() {
                         </div>
                       </td>
                       <td className="py-4">
-                      ${(item.price * item.count).toFixed(2)}
+                        ${(item.price * item.count).toFixed(2)}
                       </td>
                       <td className="py-4">
-                      <button className="p-2 my-2 bg-dark-simon rounded-lg font-semibold text-white justify-end items-end">
+                        <button className="p-2 my-2 bg-dark-simon rounded-lg font-semibold text-white justify-end items-end"
+                            onClick={() => handlRemoveItem(item._id)}>
                           Remove
                         </button>
                       </td>

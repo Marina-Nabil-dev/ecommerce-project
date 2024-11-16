@@ -16,24 +16,21 @@ const Navbar = () => {
   const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  const modalRef = useRef();
 
   const dispatch = useDispatch();
 
   const { userToken, isAuthenticated } = useSelector((state) => state.user);
-  const { itemNumber } = useSelector((state) => state.cart);  
-  
+  const { itemNumber } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (userToken && !isAuthenticated) {
       dispatch(verifyToken(userToken));
     }
-  }, [dispatch, isAuthenticated]);
-
+  }, [userToken, dispatch, isAuthenticated]);
 
   useEffect(() => {
-   dispatch(getUserCart())
-  }, [ isAuthenticated]);
+    dispatch(getUserCart());
+  }, [dispatch, isAuthenticated]);
 
   const openModal = (type) => {
     setModalType(type);
@@ -49,9 +46,6 @@ const Navbar = () => {
     setIsModalOpen(false);
     setModalType("");
   };
-  const closeAccountModal = () => setAccountIsOpen(false);
-
-
 
   const handleLogout = () => {
     dispatch(clearToken());
@@ -112,7 +106,7 @@ const Navbar = () => {
             />
           </form>
         </div>
-        {! isAuthenticated ? (
+        {!isAuthenticated ? (
           <div className="hidden md:flex space-x-4">
             <button
               className="text-white border rounded-full px-4 py-2 bg-simon hover:bg-dark-simon"

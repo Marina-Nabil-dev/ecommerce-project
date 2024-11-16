@@ -10,17 +10,15 @@ export const deleteApiData = async (routeName, headerObject={}) => {
     const response = await axios.delete(
       process.env.REACT_APP_API_DEVELOP_URL + routeName,
       { headers }
-    );
+    );    
 
     return {
-      status: response.data.status,
-      message: response.data.message,
+      status: response.status,
       data: response.data,
     };
   } catch (error) {
     return {
       status: error.response.status,
-      message: error.response.data.message,
       data: error.response.data.errors,
     };
   }
