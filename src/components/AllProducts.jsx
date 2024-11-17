@@ -11,7 +11,7 @@ import { useQuery } from "react-query";
 import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addCart } from "../redux/Reducers/cartReducer";
+import { useAddToCartMutation } from "../redux/APIs/cartApis";
 
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,9 +47,15 @@ const AllProducts = () => {
     }
   );
 
-  function addToCart(product) {
-    dispatch(addCart(product));
-  }
+  const [addToCart, { cartIsLoading, isError, isSuccess }] = useAddToCartMutation();
+
+  const handleAddToCart = async (productId) => {
+    try {
+      await addToCart(productId).unwrap();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
 
   useEffect(() => {
     refetch();
@@ -130,8 +136,9 @@ const AllProducts = () => {
                     </div>
                   </Link>
                   <div className="flex my-2 items-center justify-center">
+                  {cartIsLoading && <Spinner />}
                     <button
-                    onClick={() => dispatch(addCart(product.id))}
+                    onClick={() => handleAddToCart(product.id)} 
                       className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
                     >
                       Add To Cart

@@ -2,22 +2,37 @@ import React from "react";
 import Spinner from "../icons/Spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart, removeItemFromCart } from "../redux/Reducers/cartReducer";
+import { useGetUserCartQuery, useClearItemFromCartMutation } from '../redux/APIs/cartApis';
+
 
 export default function Cart() {
   const dispatch = useDispatch();
 
-  const { loading, cartList, totalPrice, buttonLoading } = useSelector((state) => state.cart);
   function handlRemoveItem(itemId) {
     dispatch(removeItemFromCart(itemId));
   }
 
-  function handleClearCart() {    
-    dispatch(clearCart());
-  }
+  const [clearCart , {loading}] = useClearItemFromCartMutation()
+
+  const handleClearCart =  async() => {
+    
+    try {
+      await clearCart().unwrap();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
+
+  const { data, error, isLoading } = useGetUserCartQuery();
+  const { cartList,totalPrice } = data || {};
+  
+
+  // if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching cart: {error.message}</div>;
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <Spinner />
       ) : (
         <div className="bg-gray-100 min-h-screen p-10">

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {  useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
 import { Link } from "react-router-dom";
@@ -8,7 +8,7 @@ import { BiLogOutCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { clearToken, verifyToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
-import { getUserCart } from "../redux/Reducers/cartReducer";
+import { useGetUserCartQuery } from "../redux/APIs/cartApis";
 
 const Navbar = () => {
   const inputRef = useRef(null);
@@ -20,7 +20,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { userToken, isAuthenticated } = useSelector((state) => state.user);
-  const { itemNumber } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (userToken && !isAuthenticated) {
@@ -28,9 +27,10 @@ const Navbar = () => {
     }
   }, [userToken, dispatch, isAuthenticated]);
 
-  useEffect(() => {
-    dispatch(getUserCart());
-  }, [dispatch, isAuthenticated]);
+  const { data } = useGetUserCartQuery();
+  
+  const { itemNumber =0 } = data || {};
+
 
   const openModal = (type) => {
     setModalType(type);
@@ -50,7 +50,6 @@ const Navbar = () => {
   const handleLogout = () => {
     dispatch(clearToken());
     toast.success("Logout Successful");
-    // window.location.reload();
   };
   return (
     <>
