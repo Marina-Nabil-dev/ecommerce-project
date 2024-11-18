@@ -14,6 +14,8 @@ export const cartApi = createApi({
       return headers;
     },
   }),
+  keepUnusedDataFor: 60 * 5,
+  refetchOnMountOrArgChange: false, 
   tagTypes: ["CartItems"],
   endpoints: (builder) => ({
     getUserCart: builder.query({
