@@ -3,69 +3,35 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
 import "swiper/css/pagination"; // if you need pagination
-import { Navigation, Pagination } from "swiper";
-import { getApiData } from "../helpers/getApiData";
-import { HomeRoutes } from "../routes/home";
 import Spinner from "../icons/Spinner";
-import { useQuery } from "react-query";
-import { NavbarRoutes } from "../routes/navbarRoutes";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useAddToCartMutation } from "../redux/APIs/cartApis";
+import { useGetAllProductsQuery } from "../redux/APIs/productApi";
 
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [products, setProducts] = useState([]);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
-  const dispatch = useDispatch();
-  const { loading, errors, itemNumber } = useSelector((state) => state.cart);
-  
 
+  const [addToCart, { cartIsLoading, isError, isSuccess }] =
+    useAddToCartMutation();
 
-  function fetchProducts(queryData) {
-    const response = getApiData(
-      `${NavbarRoutes.ALL_PRODUCTS}?page=${queryData.queryKey[1]}&limit=${queryData.queryKey[2]}`
-    );
-
-    return response;
-  }
-
-  let { isLoading, isFetching, error, data, refetch } = useQuery(
-    ["products", currentPage, limit],
-    fetchProducts,
-    {
-      staleTime: 1000 * 60 * 5, // Cache data for 5 minutes (300,000 ms)
-      cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused
-      keepPreviousData: true, // Keep previous data when refetching
-      onSuccess: (data) => {
-        const [totalCount, currentPage ,products] = data;
-
-        setProducts(products);
-      },
-    }
-  );
-
-  const [addToCart, { cartIsLoading, isError, isSuccess }] = useAddToCartMutation();
+  const {
+    data: { products = [], totalCount = 0 } = {},
+    isLoading,
+    isFetching,
+  } = useGetAllProductsQuery(currentPage, limit);
 
   const handleAddToCart = async (productId) => {
     try {
       await addToCart(productId).unwrap();
     } catch (error) {
-      console.error('Error adding item to cart:', error);
+      console.error("Error adding item to cart:", error);
     }
   };
 
-  useEffect(() => {
-    refetch();
-  }, [currentPage]);
+  const totalPages = Math.ceil(totalCount / limit);
 
-  // Calculate the total number of products to determine total pages
-  const totalProducts = data ? totalCount : 0; // Assuming your API has totalCount
-  const totalPages = Math.ceil(totalProducts / limit);
-
-  // Determine if the current page is the last page
   const isLastPage = currentPage === totalPages;
 
   return (
@@ -136,9 +102,9 @@ const AllProducts = () => {
                     </div>
                   </Link>
                   <div className="flex my-2 items-center justify-center">
-                  {cartIsLoading && <Spinner />}
+                    {cartIsLoading && <Spinner />}
                     <button
-                    onClick={() => handleAddToCart(product.id)} 
+                      onClick={() => handleAddToCart(product.id)}
                       className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
                     >
                       Add To Cart
@@ -162,6 +128,7 @@ const AllProducts = () => {
               {currentPage > 1 && (
                 <button
                   onClick={() => setCurrentPage(currentPage - 1)}
+                  isLoading={isFetching}
                   className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 hover:bg-blue-300"
                 >
                   {currentPage - 1}
@@ -177,6 +144,7 @@ const AllProducts = () => {
               {!isLastPage && (
                 <button
                   onClick={() => setCurrentPage(currentPage + 1)}
+                  isLoading={isFetching}
                   className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 hover:bg-blue-300"
                 >
                   {currentPage + 1}

@@ -49,7 +49,7 @@ export const cartApi = createApi({
         if (response.status === "success") {
           toast.success(response.message, {
             duration: 5000,
-            position: "top-right",
+            position: "bottom-right",
             icon: "🛒",
             iconTheme: {
               primary: "green",
