@@ -1,43 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
 import "swiper/css/pagination"; // if you need pagination
-import { Navigation, Pagination } from "swiper";
-import { getApiData } from "../../helpers/getApiData";
-import { HomeRoutes } from "../../routes/home";
 import Spinner from "../../icons/Spinner";
-import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { NavbarRoutes } from "../../routes/navbarRoutes";
-// import { CartContext } from "../../contexts/cartContext";
+import { useDispatch } from "react-redux";
+import { useGetAllProductsQuery } from "../../redux/APIs/productApi";
+import { useAddToCartMutation } from "../../redux/APIs/cartApis";
 const RecentlyAddedSection = () => {
-  const [recentlyAddedProducts, setRecentlyAddedProducts] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  // const { addCart } = useContext(CartContext);
-  function fetchProducts() {
-    const response = getApiData(HomeRoutes.PRODUCTS);
-    return response;
-  }
-  let { isLoading, isFetching, error, data, refetch } = useQuery(
-    "products",
-    fetchProducts,
-    {
-      staleTime: 1000 * 60 * 5, // Cache data for 5 minutes (300,000 ms)
-      cacheTime: 1000 * 60 * 10, // Keep data in cache for 10 minutes even if unused,
-      
-      onSuccess: (data) => {
-        const [totalCount, currentPage ,products] = data;
-        
-        setRecentlyAddedProducts(products);
-        setTotalCount(totalCount);
-      },
-    }
-  );
+  
 
-  const firstTenRadomProducts = recentlyAddedProducts
-    ?.sort(() => Math.random() - 0.5)
-    .slice(0, 7);
+  const dispatch = useDispatch();
+
+const {data: { products = [] } = {}, isLoading} = useGetAllProductsQuery({page : 1 , limit:7});
+
+const [addToCart] = useAddToCartMutation();
+
+const handleAddToCart = async (productId) => {
+  try {
+    await addToCart(productId).unwrap();
+  } catch (error) {
+    console.error("Error adding item to cart:", error);
+  }
+};
   
   return (
     <>
@@ -49,7 +36,7 @@ const RecentlyAddedSection = () => {
             Recently Added Products
           </h2>
           <div className="grid md:grid-cols-4 gap-3 mt-4">
-            {firstTenRadomProducts.map((product) => (
+            {products.map((product) => (
               <div
                 key={product.id}
                 className="border-[3px] rounded p-4 hover:border-baby-blue "
@@ -96,7 +83,7 @@ const RecentlyAddedSection = () => {
                   </div>
                   <div className="flex my-2 items-center justify-center">
                     <button
-                      className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
+                      className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded" onClick={() => handleAddToCart(product._id)}
                     >
                       Add To Cart
                     </button>
