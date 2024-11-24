@@ -15,6 +15,7 @@ import Cart from "./components/Cart";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { ConfigStore } from "./redux/store";
+import AllCategories from "./components/AllCategories";
 
 
 const queryClient = new QueryClient();
@@ -31,6 +32,10 @@ function App() {
         {
           path: "/products",
           element: <AllProducts />,
+        },
+        {
+          path :"/categories",
+          element : <AllCategories/>
         },
         {
           path: "/product/:id",

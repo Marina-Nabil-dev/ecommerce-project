@@ -12,8 +12,6 @@ import { useAddToCartMutation } from "../../redux/APIs/cartApis";
 const RecentlyAddedSection = () => {
   
 
-  const dispatch = useDispatch();
-
 const {data: { products = [] } = {}, isLoading} = useGetAllProductsQuery({page : 1 , limit:7});
 
 const [addToCart] = useAddToCartMutation();
@@ -52,6 +50,7 @@ const handleAddToCart = async (productId) => {
                     </SwiperSlide>
                   ))}
                 </Swiper>
+                <Link to={`/product/${product.id}`}>
                 <div className="block my-2">
                   <h2 className="text-left font-bold text-green-600">
                     {product.category.name}
@@ -89,6 +88,7 @@ const handleAddToCart = async (productId) => {
                     </button>
                   </div>
                 </div>
+                </Link>
               </div>
             ))}
 

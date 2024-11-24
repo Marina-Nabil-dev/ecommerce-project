@@ -1,6 +1,6 @@
 import React from 'react'
-import PopularCategories from '../components/PopularCategories'
 import RecentlyAddedSection from '../components/Home/RecentlyAddedSection'
+import PopularCategories from '../components/Home/PopularCategories'
 
 export default function Home() {
   

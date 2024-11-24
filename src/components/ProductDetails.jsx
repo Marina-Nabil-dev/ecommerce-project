@@ -7,6 +7,7 @@ import Spinner from "../icons/Spinner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
+import { useAddToCartMutation } from "../redux/APIs/cartApis";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -33,9 +34,19 @@ export default function ProductDetails() {
       setProduct(data[0]);
     },
   });
-
-  function addToCart(productId) {
+  function handleAddToCart(productId) {
+    // Implement your add-to-cart logic here
+    console.log(`Added product ${productId} to the cart`);
   }
+  // const [addToCart] = useAddToCartMutation();
+
+  // const handleAddToCart = async (productId) => {
+  //   try {
+  //     await addToCart(productId).unwrap();
+  //   } catch (error) {
+  //     console.error("Error adding item to cart:", error);
+  //   }
+  // };
 
   return (
     <>
@@ -115,7 +126,7 @@ export default function ProductDetails() {
                 {/* Add to Cart Button */}
                 <div className="mt-6 flex space-x-4">
                   <button
-                    onClick={addToCart(product.id)}
+                    onClick={handleAddToCart(product.id)}
                     className="flex items-center justify-center px-4 py-2 bg-dark-simon text-white font-semibold rounded-lg hover:bg-simon"
                   >
                     <ShoppingCartIcon className="h-5 w-5 mr-2" />
