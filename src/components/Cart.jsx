@@ -6,6 +6,7 @@ import {
   useGetUserCartQuery,
   useClearItemFromCartMutation,
 } from "../redux/APIs/cartApis";
+import ErrorComponent from "./ErrorComponent";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -71,17 +72,15 @@ export default function Cart() {
     return totalAmount + flatPrice;
   }, [totalAmount, flatPrice])
 
-  // if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching cart: {error.message}</div>;
+  if (isLoading) return <div><Spinner/></div>;
+  if (error) return <div><ErrorComponent /></div>;
 
   return (
     <>
-      {isLoading ? (
-        <Spinner />
-      ) : (
+      
         <div className="bg-gray-100 min-h-screen p-10">
           <div className="container mx-auto flex flex-col md:flex-row gap-10">
-            {/* Cart Items Section */}
+           
             <div className="w-full md:w-2/3 bg-white p-6 rounded-lg shadow-lg">
               <h1 className="text-3xl font-semibold mb-6">Your Cart</h1>
 
@@ -210,7 +209,7 @@ export default function Cart() {
             </div>
           </div>
         </div>
-      )}
+      
     </>
   );
 }

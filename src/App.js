@@ -1,10 +1,5 @@
-import React, { lazy,Suspense, useState } from "react";
-import { UserContextProvider } from "./contexts/userContext";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./pages/Layout";
 import NotFound from "./components/NotFound";
 import Home from "./pages/Home";
@@ -17,9 +12,8 @@ import { Provider } from "react-redux";
 import { ConfigStore } from "./redux/store";
 import AllCategories from "./components/AllCategories";
 import Spinner from "./icons/Spinner";
-const LazyComponent = lazy(() => import('./LazyComponent'));
-
-
+import ErrorComponent from "./components/ErrorComponent";
+const LazyComponent = lazy(() => import("./icons/Spinner"));
 
 const queryClient = new QueryClient();
 function App() {
@@ -37,8 +31,8 @@ function App() {
           element: <AllProducts />,
         },
         {
-          path :"/categories",
-          element : <AllCategories/>
+          path: "/categories",
+          element: <AllCategories />,
         },
         {
           path: "/product/:id",
@@ -52,7 +46,6 @@ function App() {
           path: "*",
           element: <NotFound />,
         },
-      
       ],
     },
   ]);
@@ -60,20 +53,24 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={ConfigStore}>
-          <RouterProvider router={router}></RouterProvider>
-          
-          <Toaster position="middle-right" reverseOrder={false} 
+        <RouterProvider router={router}>
+          <Suspense fallback={<ErrorComponent />}>
+            <LazyComponent />
+          </Suspense>
+        </RouterProvider>
+
+        <Toaster
+          position="middle-right"
+          reverseOrder={false}
           toastOptions={{
             success: {
               style: {
-                color: 'green',
-                backgroundColor: 'white',
+                color: "green",
+                backgroundColor: "white",
               },
             },
-          }} />
-          <Suspense fallback={<Spinner />}>
-          <LazyComponent></LazyComponent>
-          </Suspense>
+          }}
+        />
       </Provider>
     </QueryClientProvider>
   );

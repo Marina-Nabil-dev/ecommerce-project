@@ -27,9 +27,8 @@ const Navbar = () => {
     }
   }, [userToken, dispatch, isAuthenticated]);
 
-  const { data } = useGetUserCartQuery();
+  const { data :{itemNumber = 0} = {} } = useGetUserCartQuery();
   
-  const { itemNumber =0 } = data || {};
 
 
   const openModal = (type) => {

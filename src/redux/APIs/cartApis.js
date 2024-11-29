@@ -44,7 +44,7 @@ export const cartApi = createApi({
       query: (productId) => ({
         url: CartRoutes.ADD_TO_CART,
         method: "POST",
-        body: { productId },
+        body: { productId },  
       }),
       invalidatesTags: ["CartItems"],
       transformResponse: (response) => {
@@ -55,7 +55,7 @@ export const cartApi = createApi({
             icon: "🛒",
             iconTheme: {
               primary: "green",
-              secondary: "white",
+              secondary: "white"
             },
             style: { color: "green" },
           });
