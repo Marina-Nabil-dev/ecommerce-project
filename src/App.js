@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { lazy,Suspense, useState } from "react";
 import { UserContextProvider } from "./contexts/userContext";
 import {
   createBrowserRouter,
@@ -16,6 +16,9 @@ import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { ConfigStore } from "./redux/store";
 import AllCategories from "./components/AllCategories";
+import Spinner from "./icons/Spinner";
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
 
 
 const queryClient = new QueryClient();
@@ -58,6 +61,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Provider store={ConfigStore}>
           <RouterProvider router={router}></RouterProvider>
+          
           <Toaster position="middle-right" reverseOrder={false} 
           toastOptions={{
             success: {
@@ -67,6 +71,9 @@ function App() {
               },
             },
           }} />
+          <Suspense fallback={<Spinner />}>
+          <LazyComponent></LazyComponent>
+          </Suspense>
       </Provider>
     </QueryClientProvider>
   );

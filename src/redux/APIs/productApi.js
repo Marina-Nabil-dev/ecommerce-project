@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { HomeRoutes } from "../../routes/home";
+import { ProductRoutes } from "./../../routes/productRoutes";
 
 export const productApi = createApi({
   reducerPath: "productApi",
@@ -30,8 +31,20 @@ export const productApi = createApi({
           };
         }
       },
-    }),
-  }),
-});
 
-export const { useGetAllProductsQuery } = productApi;
+    }),
+    getProduct: builder.query({
+      query: (id) => ProductRoutes.PRODUCT_DETAILS + id,
+      transformResponse: (response) => {
+        return {
+          product: response.data,
+        }
+      },
+      transformErrorResponse: (error) => {
+        return error;
+      },
+    }),
+    }),
+  })
+
+export const { useGetAllProductsQuery, useGetProductQuery } = productApi;
