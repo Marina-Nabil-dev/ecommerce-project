@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import ErrorComponent from "../components/ErrorComponent";
 
 export default function Spinner() {

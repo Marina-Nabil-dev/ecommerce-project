@@ -3,4 +3,5 @@ export const CartRoutes = {
   USER_CART: "cart",
   REMOVE_ITEM_FROM_CART : "cart/",
   CLEAR_CART: "cart",
+  CHECK_OUT : "orders/checkout-session/"
 };

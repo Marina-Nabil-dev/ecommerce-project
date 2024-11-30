@@ -15,7 +15,7 @@ export const cartApi = createApi({
     },
   }),
   keepUnusedDataFor: 60 * 5,
-  refetchOnMountOrArgChange: false, 
+  refetchOnMountOrArgChange: false,
   tagTypes: ["CartItems"],
   endpoints: (builder) => ({
     getUserCart: builder.query({
@@ -25,14 +25,17 @@ export const cartApi = createApi({
       }),
       providesTags: ["CartItems"],
       transformResponse: (response) => {
+        
         if (response.status === "success") {
           return {
+            cartId : response.cartId,
             cartList: response.data.products,
             itemNumber: response.numOfCartItems,
             totalPrice: response.data.totalCartPrice,
           };
         } else {
           return {
+            cartId : 0,
             cartList: [],
             itemNumber: 0,
             totalPrice: 0,
@@ -44,7 +47,7 @@ export const cartApi = createApi({
       query: (productId) => ({
         url: CartRoutes.ADD_TO_CART,
         method: "POST",
-        body: { productId },  
+        body: { productId },
       }),
       invalidatesTags: ["CartItems"],
       transformResponse: (response) => {
@@ -55,7 +58,7 @@ export const cartApi = createApi({
             icon: "🛒",
             iconTheme: {
               primary: "green",
-              secondary: "white"
+              secondary: "white",
             },
             style: { color: "green" },
           });
@@ -73,30 +76,56 @@ export const cartApi = createApi({
         }
       },
     }),
-    clearItemFromCart : builder.mutation({
-        query : () =>({
-            url : CartRoutes.CLEAR_CART,
-            method : "DELETE"
-
-        }),
-        invalidatesTags : ["CartItems"],
-        transformResponse : (response) => {   
-                     
-            if (response.message === "success") {
-                toast.success("Cart Cleared", {
-                  duration: 5000,
-                  position: "top-right",
-                  icon: "🛒",
-                  iconTheme: {
-                    primary: "blue",
-                    secondary: "white",
-                  },
-                  style: { color: "blue" },
-                });
-              }
+    clearItemFromCart: builder.mutation({
+      query: () => ({
+        url: CartRoutes.CLEAR_CART,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["CartItems"],
+      transformResponse: (response) => {
+        if (response.message === "success") {
+          toast.success("Cart Cleared", {
+            duration: 5000,
+            position: "top-right",
+            icon: "🛒",
+            iconTheme: {
+              primary: "blue",
+              secondary: "white",
+            },
+            style: { color: "blue" },
+          });
         }
+      },
+    }),
+
+    checkOut: builder.mutation({
+      query: ({data, cartId}) => ({
+        url: CartRoutes.CHECK_OUT + cartId + "/url=http://localhost:3000",
+        method: "POST",
+        body: {'shippingAddress' : data},
+      }),
+      invalidatesTags: ["CartItems"],
+      transformResponse: (response) => {
+        if (response.status === "success") {
+          toast.success("Checkout successful", {
+            duration: 5000,
+            position: "top-right",
+            icon: "🛒",
+            iconTheme: {
+              primary: "blue",
+              secondary: "white",
+            },
+            style: { color: "blue" },
+          });
+        }
+      },
     })
   }),
 });
 
-export const { useGetUserCartQuery, useAddToCartMutation, useClearItemFromCartMutation } = cartApi;
+export const {
+  useGetUserCartQuery,
+  useAddToCartMutation,
+  useClearItemFromCartMutation,
+  useCheckOutMutation,
+} = cartApi;
