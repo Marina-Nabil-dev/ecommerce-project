@@ -11,6 +11,7 @@ export const cartApi = createApi({
       if (token) {
         headers.set("token", `${token}`);
       }
+      headers.set('Accept-Language', 'en')
       return headers;
     },
   }),
@@ -100,11 +101,10 @@ export const cartApi = createApi({
 
     checkOut: builder.mutation({
       query: ({data, cartId}) => ({
-        url: CartRoutes.CHECK_OUT + cartId + "/url=http://localhost:3000",
+        url: `${CartRoutes.CHECK_OUT}${cartId}`,
         method: "POST",
         body: {'shippingAddress' : data},
       }),
-      invalidatesTags: ["CartItems"],
       transformResponse: (response) => {
         if (response.status === "success") {
           toast.success("Checkout successful", {
@@ -117,8 +117,10 @@ export const cartApi = createApi({
             },
             style: { color: "blue" },
           });
+          return response.session;
         }
       },
+      refetchOnMountOrArgChange: false,
     })
   }),
 });

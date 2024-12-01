@@ -15,7 +15,7 @@ export const productApi = createApi({
 
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ page = 1, limit = 10 }) =>
+      query: ({ page = 1, limit = 8 }) =>
         HomeRoutes.PRODUCTS + `?page=${page}&limit=${limit}`,
 
       transformResponse: (response) => {

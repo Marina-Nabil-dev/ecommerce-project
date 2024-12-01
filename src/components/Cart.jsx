@@ -76,18 +76,17 @@ export default function Cart() {
     return totalAmount + flatPrice;
   }, [totalAmount, flatPrice]);
 
-  const [checkOut, isLoadingCheckOut] = useCheckOutMutation();
+  const [checkOut] = useCheckOutMutation();
 
   const handleSubmit = () => {
     
     setMessage("");
     setErrors({});
-    // Handle form submission here
     checkOut({ data: checkOurtForm.values, cartId })
       .unwrap()
       .then((response) => {
-        console.log("Checkout successful:", response);
-        setMessage("Checkout successful");
+        window.location.href = response.url;
+      
       })
       .catch((error) => {
         console.error("Checkout failed:", error);
@@ -285,12 +284,24 @@ export default function Cart() {
                 <span>${totalAmountWithShipping.toFixed(2)}</span>
               </div>
 
-              <button
-                onClick={() => handleSubmit()}
-                className="bg-[#FF8B94] text-white w-full py-3 rounded-lg hover:bg-[#F76C78]"
-              >
-                Checkout
-              </button>
+                <button
+                  onClick={() => handleSubmit()}
+                  disabled={
+                    !checkOurtForm.values.details ||
+                    !checkOurtForm.values.city ||
+                    !checkOurtForm.values.phone
+                  }
+                  type="submit"
+                  className={`w-full py-3 rounded-lg ${
+                    !checkOurtForm.values.details ||
+                    !checkOurtForm.values.city ||
+                    !checkOurtForm.values.phone
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-[#FF8B94] hover:bg-[#F76C78]"
+                  } text-white`}
+                >
+                  Checkout
+                </button>
 
               <div className="flex justify-center items-center mt-4">
                 <span className="text-sm text-gray-600">or</span>

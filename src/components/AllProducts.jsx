@@ -13,14 +13,16 @@ const AllProducts = () => {
   const limit = 8; // Items per page
   const inputRef = useRef(null);
 
-  const [addToCart, { cartIsLoading, isError, isSuccess }] =
+  const [addToCart, { cartIsLoading }] =
     useAddToCartMutation();
 
   const {
     data: { products = [], totalCount = 0 } = {},
     isLoading,
     isFetching,
-  } = useGetAllProductsQuery(currentPage, limit);
+  } = useGetAllProductsQuery(
+    { currentPage, limit },
+  );  
 
   const handleAddToCart = async (productId) => {
     try {
@@ -29,7 +31,6 @@ const AllProducts = () => {
       console.error("Error adding item to cart:", error);
     }
   };
-
   const totalPages = Math.ceil(totalCount / limit);
 
   const isLastPage = currentPage === totalPages;
