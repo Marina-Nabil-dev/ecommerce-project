@@ -22,8 +22,8 @@ const AllProducts = () => {
     isFetching,
   } = useGetAllProductsQuery(
     { currentPage, limit },
-  );  
-
+  );
+  
   const handleAddToCart = async (productId) => {
     try {
       await addToCart(productId).unwrap();
