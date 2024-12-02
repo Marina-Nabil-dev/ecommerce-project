@@ -13,6 +13,8 @@ import { ConfigStore } from "./redux/store";
 import AllCategories from "./components/AllCategories";
 import Spinner from "./icons/Spinner";
 import ErrorComponent from "./components/ErrorComponent";
+import Orders from "./components/Orders";
+import OrderPage from "./components/OrderPage";
 const LazyComponent = lazy(() => import("./icons/Spinner"));
 
 const queryClient = new QueryClient();
@@ -46,6 +48,14 @@ function App() {
           path: "*",
           element: <NotFound />,
         },
+        {
+          path : "/allorders",
+          element: <Orders />
+        },
+        {
+          path : "/order/:id",
+          element : <OrderPage/>
+        }
       ],
     },
   ]);
