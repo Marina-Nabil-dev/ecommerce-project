@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import Spinner from "../icons/Spinner";
 import { useDispatch } from "react-redux";
-import { removeItemFromCart } from "../redux/Reducers/cartReducer";
 import {
   useGetUserCartQuery,
   useClearItemFromCartMutation,
@@ -16,7 +15,8 @@ export default function Cart() {
   const dispatch = useDispatch();
 
   function handlRemoveItem(itemId) {
-    dispatch(removeItemFromCart(itemId));
+    console.log('todo');
+    
   }
 
   const [clearCart] = useClearItemFromCartMutation();
