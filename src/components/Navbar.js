@@ -1,4 +1,4 @@
-import React, {  useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
 import { Link } from "react-router-dom";
@@ -27,9 +27,7 @@ const Navbar = () => {
     }
   }, [userToken, dispatch, isAuthenticated]);
 
-  const { data :{itemNumber = 0} = {} } = useGetUserCartQuery();
-  
-
+  const { data: { itemNumber = 0 } = {} } = useGetUserCartQuery();
 
   const openModal = (type) => {
     setModalType(type);
@@ -63,32 +61,42 @@ const Navbar = () => {
           />
         </div>
         <div className="flex w-1/3 p-[10px] mx-2 gap-2 self-stretch">
-          <GuardRouting>
-            <Link
-              className=" text-white font-semibold"
-              role="menuitem"
-              to="/categories"
-            >
-              Categories
-            </Link>
-          </GuardRouting>
-          <GuardRouting>
-            <Link
-              className=" text-white font-semibold"
-              role="menuitem"
-              to="/products"
-            >
-              Products
-            </Link>
-          </GuardRouting>
+          {/* <GuardRouting> */}
+          <Link
+            className=" text-white font-semibold"
+            role="menuitem"
+            to="/categories"
+          >
+            Categories
+          </Link>
+          {/* </GuardRouting> */}
+          {/* <GuardRouting> */}
+          <Link
+            className=" text-white font-semibold"
+            role="menuitem"
+            to="/products"
+          >
+            Products
+          </Link>
+          {/* </GuardRouting> */}
+
+          {/* <GuardRouting> */}
+          <Link
+            className=" text-white font-semibold"
+            role="menuitem"
+            to="/brands"
+          >
+            Brands
+          </Link>
+          {/* </GuardRouting> */}
 
           <GuardRouting>
             <Link
               className=" text-white font-semibold"
               role="menuitem"
-              to="/brands"
+              to="/allorders"
             >
-              Brands
+              All Orders
             </Link>
           </GuardRouting>
         </div>
