@@ -1,5 +1,3 @@
-import { Navigate } from "react-router-dom";
-
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { saveLastRoute } from "../services/routePersistence";

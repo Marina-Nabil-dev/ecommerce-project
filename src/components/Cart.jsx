@@ -10,9 +10,9 @@ import ErrorComponent from "./ErrorComponent";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import FormField from "./Forms/Fields/FormField";
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
-  const dispatch = useDispatch();
 
   function handlRemoveItem(itemId) {
     console.log("todo");
@@ -209,9 +209,10 @@ export default function Cart() {
             </div>
 
             <div className="flex justify-end mt-6 space-x-4">
-              <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">
+              <Link to='/products'><button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">
                 Continue Shopping
               </button>
+              </Link>
               <button className="bg-[#FF8B94] text-white px-4 py-2 rounded hover:bg-[#F76C78]">
                 Update Cart
               </button>
@@ -252,7 +253,7 @@ export default function Cart() {
               />
 
               <FormField
-                label="Phonee Number"
+                label="Phone Number"
                 name="phone"
                 type="number"
                 value={checkOurtForm.values.phone}

@@ -1,3 +1,4 @@
 export const ProductRoutes = {
-    PRODUCT_DETAILS : "products/"
-}
+  PRODUCT_DETAILS: "products/",
+  WISHLIST: "wishlist/",
+};

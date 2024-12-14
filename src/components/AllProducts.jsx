@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
@@ -6,24 +6,25 @@ import "swiper/css/pagination"; // if you need pagination
 import Spinner from "../icons/Spinner";
 import { Link } from "react-router-dom";
 import { useAddToCartMutation } from "../redux/APIs/cartApis";
-import { useGetAllProductsQuery } from "../redux/APIs/productApi";
+import {
+  useGetAllProductsQuery,
+  useGetWishlisttQuery,
+} from "../redux/APIs/productApi";
+import HeartIcon from "./HeartIcon";
 
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
 
-  const [addToCart, { cartIsLoading }] =
-    useAddToCartMutation();
 
   const {
     data: { products = [], totalCount = 0 } = {},
     isLoading,
     isFetching,
-  } = useGetAllProductsQuery(
-    { currentPage, limit },
-  );
-  
+  } = useGetAllProductsQuery({ currentPage, limit });
+
+  const [addToCart, { cartIsLoading }] = useAddToCartMutation();
   const handleAddToCart = async (productId) => {
     try {
       await addToCart(productId).unwrap();
@@ -34,6 +35,11 @@ const AllProducts = () => {
   const totalPages = Math.ceil(totalCount / limit);
 
   const isLastPage = currentPage === totalPages;
+
+  const { data: { wishlist = [] } = {} } = useGetWishlisttQuery();
+
+  const isProductInWishlist = useCallback((productId) =>
+     (wishlist.some((product) => product.id === productId)), [wishlist])
 
   return (
     <>
@@ -60,6 +66,11 @@ const AllProducts = () => {
                 key={product.id}
                 className="border-[3px] rounded p-4 hover:border-baby-blue "
               >
+                <HeartIcon
+                  productId={product.id}
+                  initialInWishlist={isProductInWishlist(product.id)}
+                />
+
                 <Swiper>
                   {product.images.map((img, idx) => (
                     <SwiperSlide key={idx}>
@@ -102,6 +113,7 @@ const AllProducts = () => {
                       </span>
                     </div>
                   </Link>
+
                   <div className="flex my-2 items-center justify-center">
                     {cartIsLoading && <Spinner />}
                     <button

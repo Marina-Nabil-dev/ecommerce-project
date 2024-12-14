@@ -18,7 +18,7 @@ export const brandApi = createApi({
       query: ({currentPage , limit}) => HomeRoutes.BRANDS + `?page=${currentPage}&limit=${limit}`,
       transformResponse: (response) => {
       
-        if (response.result !=0) {
+        if (response.result !==0) {
           return {
             brands: response.data,
             totalCount : response.result

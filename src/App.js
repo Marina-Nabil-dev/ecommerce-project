@@ -15,6 +15,7 @@ import ErrorComponent from "./components/ErrorComponent";
 import Orders from "./components/Orders";
 import OrderPage from "./components/OrderPage";
 import AllBrands from "./components/AllBrands";
+import Wishlist from "./pages/Wishlist";
 const LazyComponent = lazy(() => import("./icons/Spinner"));
 
 const queryClient = new QueryClient();
@@ -60,6 +61,10 @@ function App() {
        {
         path : "/brands",
         element : <AllBrands/>
+       },
+       {
+        path : "/wishlist",
+        element : <Wishlist/>
        }
       ],
     },

@@ -113,6 +113,18 @@ const Navbar = () => {
               All Orders
             </Link>
           </GuardRouting>
+
+          <GuardRouting>
+            <Link
+              className=" text-white font-semibold"
+              role="menuitem"
+              to="/wishlist"
+            >
+              Wishlist
+            </Link>
+          </GuardRouting>
+
+      
         </div>
         <div className="flex w-1/3 p-[8px_10px] mx-2 gap-2 self-stretch border-2 rounded-md">
           <form className="w-full" onSubmit={handleSubmittingForm}>
