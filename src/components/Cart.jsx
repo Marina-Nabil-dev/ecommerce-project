@@ -1,23 +1,19 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Spinner from "../icons/Spinner";
 import { useDispatch } from "react-redux";
 import {
   useGetUserCartQuery,
   useClearItemFromCartMutation,
   useCheckOutMutation,
+  useRemoveItemFromCartMutation,
 } from "../redux/APIs/cartApis";
 import ErrorComponent from "./ErrorComponent";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import FormField from "./Forms/Fields/FormField";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default function Cart() {
-
-  function handlRemoveItem(itemId) {
-    console.log("todo");
-  }
-
   const [clearCart] = useClearItemFromCartMutation();
 
   const {
@@ -35,6 +31,17 @@ export default function Cart() {
     setFlatPrice(selectedValue);
   };
 
+  const [removeItemFromCart] = useRemoveItemFromCartMutation();
+  const handlRemoveItem = async (productId) => {
+    
+    try {
+      removeItemFromCart(productId).unwrap();
+      cartList.filter(item => item._id !== productId)
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
+  };
+
   const handleClearCart = async () => {
     try {
       await clearCart().unwrap();
@@ -44,30 +51,38 @@ export default function Cart() {
   };
 
   const [quantities, setQuantities] = useState({});
+  
+  useEffect(() => {
+    if (cartList.length > 0) {
+      const initialQuantities = cartList.reduce((acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+      }, {});
+      setQuantities(initialQuantities);
+    }
+  }, [cartList]);
 
-  const handleIncreaseQuantity = useCallback((itemId) => {
+  const handleIncreaseQuantity = useCallback((item) => {
     setQuantities((prev) => ({
       ...prev,
-      [itemId]: (prev[itemId] || 1) + 1,
+      [item._id]: (prev[item._id] || item.count) + 1,
     }));
   }, []);
 
-  const handleDecreaseQuantity = useCallback((itemId) => {
+  const handleDecreaseQuantity = useCallback((item) => {
     setQuantities((prev) => ({
       ...prev,
-      [itemId]: Math.max((prev[itemId] || 1) - 1, 1),
+      [item._id]: Math.max((prev[item._id] || item.count) - 1, 1),
     }));
   }, []);
 
   const calculateItemSubtotal = useCallback(
     (item) => {
-      const quantity = quantities[item._id] || 1;
-
+      const quantity = quantities[item._id] || item.count;
       return item.price * quantity;
     },
     [quantities]
   );
-
   const totalAmount = useMemo(() => {
     if (!cartList) return 0;
     return cartList.reduce((total, item) => {
@@ -168,7 +183,7 @@ export default function Cart() {
                       <div className="flex items-center">
                         <button
                           className="px-2 py-1 bg-gray-300 rounded"
-                          onClick={() => handleDecreaseQuantity(item._id)}
+                          onClick={() => handleDecreaseQuantity(item)}
                         >
                           -
                         </button>
@@ -177,7 +192,7 @@ export default function Cart() {
                         </span>
                         <button
                           className="px-2 py-1 bg-gray-300 rounded"
-                          onClick={() => handleIncreaseQuantity(item._id)}
+                          onClick={() => handleIncreaseQuantity(item)}
                         >
                           +
                         </button>
@@ -209,9 +224,10 @@ export default function Cart() {
             </div>
 
             <div className="flex justify-end mt-6 space-x-4">
-              <Link to='/products'><button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">
-                Continue Shopping
-              </button>
+              <Link to="/products">
+                <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100">
+                  Continue Shopping
+                </button>
               </Link>
               <button className="bg-[#FF8B94] text-white px-4 py-2 rounded hover:bg-[#F76C78]">
                 Update Cart

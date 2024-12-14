@@ -11,7 +11,7 @@ export const cartApi = createApi({
       if (token) {
         headers.set("token", `${token}`);
       }
-      headers.set('Accept-Language', 'en')
+      headers.set("Accept-Language", "en");
       return headers;
     },
   }),
@@ -26,17 +26,16 @@ export const cartApi = createApi({
       }),
       providesTags: ["CartItems"],
       transformResponse: (response) => {
-        
         if (response.status === "success") {
           return {
-            cartId : response.cartId,
+            cartId: response.cartId,
             cartList: response.data.products,
             itemNumber: response.numOfCartItems,
             totalPrice: response.data.totalCartPrice,
           };
         } else {
           return {
-            cartId : 0,
+            cartId: 0,
             cartList: [],
             itemNumber: 0,
             totalPrice: 0,
@@ -77,6 +76,41 @@ export const cartApi = createApi({
         }
       },
     }),
+    removeItemFromCart: builder.mutation({
+      query: (productId) => ({
+        url: CartRoutes.REMOVE_ITEM_FROM_CART + productId,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["CartItems"],
+      transformResponse: (response) => {
+        console.log(response);
+        
+        if (response.status === "success") {
+          toast.success("Product Is Removed", {
+            duration: 5000,
+            position: "bottom-right",
+            icon: "🛒",
+            iconTheme: {
+              primary: "green",
+              secondary: "white",
+            },
+            style: { color: "green" },
+          });
+        }
+      },
+      transformErrorResponse: (error) => {
+        toast.error(error, {
+          duration: 5000,
+          position: "bottom-right",
+          icon: "🛒",
+          iconTheme: {
+            primary: "red",
+            secondary: "white",
+          },
+          style: { color: "green" },
+        });
+      },
+    }),
     clearItemFromCart: builder.mutation({
       query: () => ({
         url: CartRoutes.CLEAR_CART,
@@ -100,10 +134,10 @@ export const cartApi = createApi({
     }),
 
     checkOut: builder.mutation({
-      query: ({data, cartId}) => ({
+      query: ({ data, cartId }) => ({
         url: `${CartRoutes.CHECK_OUT}${cartId}`,
         method: "POST",
-        body: {'shippingAddress' : data},
+        body: { shippingAddress: data },
       }),
       transformResponse: (response) => {
         if (response.status === "success") {
@@ -121,7 +155,7 @@ export const cartApi = createApi({
         }
       },
       refetchOnMountOrArgChange: false,
-    })
+    }),
   }),
 });
 
@@ -130,4 +164,5 @@ export const {
   useAddToCartMutation,
   useClearItemFromCartMutation,
   useCheckOutMutation,
+  useRemoveItemFromCartMutation
 } = cartApi;

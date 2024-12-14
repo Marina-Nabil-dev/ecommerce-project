@@ -16,7 +16,7 @@ export const productApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Products"],
+  tagTypes: ["Products",'wishlistItems'],
   keepUnusedDataFor: 60 * 5, //how long the data should be kept in the cache after the subscriber reference count reaches zero.
   refetchOnMountOrArgChange: false, //if number in seconds: If there is no query, it will fetch the data.
   //If there is an existing query, but the amount of time specified since the last query has not elapsed, it will serve the existing cached data.
@@ -71,6 +71,7 @@ export const productApi = createApi({
       transformErrorResponse: (error) => {
         return error;
       },
+      invalidatesTags: ["wishListItems"],
     }),
     getWishlistt: builder.query({
       query: () => ProductRoutes.WISHLIST,
@@ -83,13 +84,14 @@ export const productApi = createApi({
         } else {
           return {
             wishlist: [],
-            count : 0,
+            count: 0,
           };
         }
       },
       transformErrorResponse: (error) => {
         return error;
       },
+      providesTags: ["wishListItems"],
     }),
     removeItemFromWishlist: builder.mutation({
       query: (id) => ({
@@ -107,6 +109,7 @@ export const productApi = createApi({
         console.log(error);
         return error;
       },
+      invalidatesTags: ["wishListItems"],
     }),
   }),
 });
