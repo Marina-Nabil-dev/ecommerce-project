@@ -11,10 +11,10 @@ import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import { ConfigStore } from "./redux/store";
 import AllCategories from "./components/AllCategories";
-import Spinner from "./icons/Spinner";
 import ErrorComponent from "./components/ErrorComponent";
 import Orders from "./components/Orders";
 import OrderPage from "./components/OrderPage";
+import AllBrands from "./components/AllBrands";
 const LazyComponent = lazy(() => import("./icons/Spinner"));
 
 const queryClient = new QueryClient();
@@ -55,13 +55,18 @@ function App() {
         {
           path : "/order/:id",
           element : <OrderPage/>
-        }
+        },
+
+       {
+        path : "/brands",
+        element : <AllBrands/>
+       }
       ],
     },
   ]);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    // <QueryClientProvider client={queryClient}>
       <Provider store={ConfigStore}>
         <RouterProvider router={router}>
           <Suspense fallback={<ErrorComponent />}>
@@ -82,7 +87,7 @@ function App() {
           }}
         />
       </Provider>
-    </QueryClientProvider>
+    // </QueryClientProvider>
   );
 }
 

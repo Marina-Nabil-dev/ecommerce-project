@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaBars } from "react-icons/fa";
 import ModalComponent from "./../Modals/ModalComponent";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import GuardRouting from "../helpers/GuardRouting";
 import { ShoppingCartIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { BiLogOutCircle } from "react-icons/bi";
@@ -9,17 +9,31 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearToken, verifyToken } from "../redux/Reducers/userReducer";
 import toast from "react-hot-toast";
 import { useGetUserCartQuery } from "../redux/APIs/cartApis";
+import { getLastRoute, saveLastRoute } from "../services/routePersistence";
 
 const Navbar = () => {
   const inputRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [accountIsOpen, setAccountIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { userToken, isAuthenticated } = useSelector((state) => state.user);
+
+
+  useEffect(() => {
+    saveLastRoute(location.pathname);
+  }, [location]);
+
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      const lastRoute = getLastRoute();
+      navigate(lastRoute, { replace: true });
+    }
+  }, []);
 
   useEffect(() => {
     if (userToken && !isAuthenticated) {

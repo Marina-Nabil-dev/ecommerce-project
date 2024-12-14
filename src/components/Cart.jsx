@@ -15,13 +15,16 @@ export default function Cart() {
   const dispatch = useDispatch();
 
   function handlRemoveItem(itemId) {
-    console.log('todo');
-    
+    console.log("todo");
   }
 
   const [clearCart] = useClearItemFromCartMutation();
 
-  const { data : {cartList = [], cartId = 0 } = {}, error, isLoading } = useGetUserCartQuery();
+  const {
+    data: { cartList = [], cartId = 0 } = {},
+    error,
+    isLoading,
+  } = useGetUserCartQuery();
 
   const [flatPrice, setFlatPrice] = useState(0);
   const [errors, setErrors] = useState({});
@@ -79,14 +82,12 @@ export default function Cart() {
   const [checkOut] = useCheckOutMutation();
 
   const handleSubmit = () => {
-    
     setMessage("");
     setErrors({});
     checkOut({ data: checkOurtForm.values, cartId })
       .unwrap()
       .then((response) => {
         window.location.href = response.url;
-      
       })
       .catch((error) => {
         console.error("Checkout failed:", error);
@@ -284,24 +285,24 @@ export default function Cart() {
                 <span>${totalAmountWithShipping.toFixed(2)}</span>
               </div>
 
-                <button
-                  onClick={() => handleSubmit()}
-                  disabled={
-                    !checkOurtForm.values.details ||
-                    !checkOurtForm.values.city ||
-                    !checkOurtForm.values.phone
-                  }
-                  type="submit"
-                  className={`w-full py-3 rounded-lg ${
-                    !checkOurtForm.values.details ||
-                    !checkOurtForm.values.city ||
-                    !checkOurtForm.values.phone
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-[#FF8B94] hover:bg-[#F76C78]"
-                  } text-white`}
-                >
-                  Checkout
-                </button>
+              <button
+                onClick={() => handleSubmit()}
+                disabled={
+                  !checkOurtForm.values.details ||
+                  !checkOurtForm.values.city ||
+                  !checkOurtForm.values.phone
+                }
+                type="submit"
+                className={`w-full py-3 rounded-lg ${
+                  !checkOurtForm.values.details ||
+                  !checkOurtForm.values.city ||
+                  !checkOurtForm.values.phone
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-[#FF8B94] hover:bg-[#F76C78]"
+                } text-white`}
+              >
+                Checkout
+              </button>
 
               <div className="flex justify-center items-center mt-4">
                 <span className="text-sm text-gray-600">or</span>

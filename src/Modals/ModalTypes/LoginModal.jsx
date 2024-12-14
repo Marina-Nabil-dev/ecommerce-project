@@ -2,22 +2,21 @@ import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AuthRoutes } from "../../routes/authRoutes";
-import FormField from './../../components/Forms/Fields/FormField';
-import PasswordInput from './../../components/Forms/Fields/PasswordInput';
-import ModalComponent from './../ModalComponent';
-import GoogleRegisterButton from './../../components/Forms/Fields/GoogleRegisterButton';
-import LoadingButton from './../../components/Forms/Fields/LoadingButton';
-import { postApiData } from '../../helpers/postApiData';
+import FormField from "./../../components/Forms/Fields/FormField";
+import PasswordInput from "./../../components/Forms/Fields/PasswordInput";
+import ModalComponent from "./../ModalComponent";
+import GoogleRegisterButton from "./../../components/Forms/Fields/GoogleRegisterButton";
+import LoadingButton from "./../../components/Forms/Fields/LoadingButton";
+import { postApiData } from "../../helpers/postApiData";
 import toast from "react-hot-toast";
-import { useDispatch } from 'react-redux';
-import { setToken } from '../../redux/Reducers/userReducer'; // Import the setToken action
+import { useDispatch } from "react-redux";
+import { setToken } from "../../redux/Reducers/userReducer"; // Import the setToken action
 
 const LoginModal = ({ closeModal, showImage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState("");
-  
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
 
   const openModal = (type) => {
     setModalType(type);
@@ -28,7 +27,9 @@ const LoginModal = ({ closeModal, showImage }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
- 
+  const toggleVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     setIsLoading(true);
@@ -42,7 +43,7 @@ const LoginModal = ({ closeModal, showImage }) => {
       localStorage.setItem("userToken", data.token);
 
       dispatch(setToken(data.token));
-      
+
       toast.success(message);
 
       closeModal();
@@ -72,10 +73,7 @@ const LoginModal = ({ closeModal, showImage }) => {
     }),
     onSubmit: handleSubmit,
   });
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+  
 
   function handleOpenRegitserModal(e) {
     e.preventDefault();
@@ -108,9 +106,7 @@ const LoginModal = ({ closeModal, showImage }) => {
             onChange={loginForm.handleChange}
             onBlur={loginForm.handleBlur}
             error={loginForm.errors.email}
-            backendError={
-              errors && errors["email"] ? errors["email"] : null
-            }
+            backendError={errors && errors["email"] ? errors["email"] : null}
             touched={loginForm.touched.email}
             placeholder="email"
           />
@@ -127,7 +123,7 @@ const LoginModal = ({ closeModal, showImage }) => {
               errors && errors["password"] ? errors["password"] : null
             }
             showPassword={showPassword}
-            togglePasswordVisibility={togglePasswordVisibility}
+            toggleVisibility={toggleVisibility}
           />
           <LoadingButton
             isLoading={isLoading}
