@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getApiData } from "../helpers/getApiData";
 import { ProductRoutes } from "../routes/productRoutes";
@@ -8,7 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
 import { useAddToCartMutation } from "../redux/APIs/cartApis";
-import { useGetProductQuery } from "../redux/APIs/productApi";
+import { useGetProductQuery, useGetWishlisttQuery } from "../redux/APIs/productApi";
+import HeartIcon from "./HeartIcon";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -27,6 +28,13 @@ export default function ProductDetails() {
     }
   };
 
+  const { data: { wishlist = [] } = {} } = useGetWishlisttQuery();
+
+  const isProductInWishlist = useCallback(
+    (productId) => wishlist.some((product) => product.id === productId),
+    [wishlist]
+  );
+
   const handleAddToCart = async (productId) => {
     console.log(`Added product ${productId} to the cart`);
     try {
@@ -43,7 +51,14 @@ export default function ProductDetails() {
       ) : (
         <div className="bg-gray-100 min-h-screen p-10">
           <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-lg p-6">
+         <div className="relative top-3 right-3">
+         <HeartIcon
+                  productId={product.id}
+                  initialInWishlist={isProductInWishlist(product.id)}
+                />
+         </div>
             <div className="flex flex-col md:flex-row gap-8">
+              
               {/* Left: Image Slider */}
               <div className="w-full md:w-1/2">
                 <Swiper

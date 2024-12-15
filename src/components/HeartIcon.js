@@ -1,9 +1,16 @@
 import React, { useState, useCallback, useEffect, memo } from "react"; // Update path to API
-import { useAddToWishlistMutation, useRemoveItemFromWishlistMutation } from "../redux/APIs/productApi";
+import {
+  useAddToWishlistMutation,
+  useRemoveItemFromWishlistMutation,
+} from "../redux/APIs/productApi";
+import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 
 const HeartIcon = memo(({ productId, initialInWishlist }) => {
   // State for the heart icon
   const [isInWishlist, setIsInWishlist] = useState(initialInWishlist);
+
+  const { userToken, isAuthenticated } = useSelector((state) => state.user);
 
   // Sync local state with parent prop when it changes
   useEffect(() => {
@@ -15,6 +22,11 @@ const HeartIcon = memo(({ productId, initialInWishlist }) => {
 
   const toggleWishlist = useCallback(async () => {
     try {
+      if (!isAuthenticated) {
+        toast.error("Please Login First", {
+          style: { color: "red" },
+        });
+      }
       if (isInWishlist) {
         await removeFromWishlist(productId).unwrap();
       } else {
