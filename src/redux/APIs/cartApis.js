@@ -2,39 +2,22 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import toast from "react-hot-toast";
 import { CartRoutes } from "../../routes/cartRoutes";
 
-// Create a baseQuery with custom error handling
-const baseQuery = fetchBaseQuery({
-  baseUrl: process.env.REACT_APP_API_DEVELOP_URL, // Replace with your actual base URL
-  prepareHeaders: (headers) => {
-    const token = localStorage.getItem('userToken');
-    if (token) {
-      headers.set("authorization", `Bearer ${token}`);
-    }
-    return headers;
-  },
-});
-
-const baseQueryWith401Handler = async (args, api, extraOptions) => {
-  const result = await baseQuery(args, api, extraOptions);
-
-  // Handle 401 Unauthorized Error
-  if (result.error && result.error.status === 401) {
-    toast.error("Unauthorized access. Please log in.");
-
-    // Optional: Perform a logout if you want to clear the user's session
-    // api.dispatch(logoutUser()); // Logout logic can be implemented here
-  }
-
-  return result;
-};
 export const cartApi = createApi({
   reducerPath: "cartApi",
-  baseQuery: baseQueryWith401Handler,
-
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.REACT_APP_API_DEVELOP_URL, // Replace with your actual base URL
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem("userToken");
+      if (token) {
+        headers.set("token", `${token}`);
+      }
+      headers.set("Accept-Language", "en");
+      return headers;
+    },
+  }),
   keepUnusedDataFor: 60 * 5,
   refetchOnMountOrArgChange: false,
   tagTypes: ["CartItems"],
-  skip: !localStorage.getItem("userToken"),
   endpoints: (builder) => ({
     getUserCart: builder.query({
       query: () => ({
@@ -101,7 +84,7 @@ export const cartApi = createApi({
       invalidatesTags: ["CartItems"],
       transformResponse: (response) => {
         console.log(response);
-
+        
         if (response.status === "success") {
           toast.success("Product Is Removed", {
             duration: 5000,
@@ -181,5 +164,31 @@ export const {
   useAddToCartMutation,
   useClearItemFromCartMutation,
   useCheckOutMutation,
-  useRemoveItemFromCartMutation,
+  useRemoveItemFromCartMutation
 } = cartApi;
+
+// // Create a baseQuery with custom error handling
+// const baseQuery = fetchBaseQuery({
+//   baseUrl: process.env.REACT_APP_API_DEVELOP_URL, // Replace with your actual base URL
+//   prepareHeaders: (headers) => {
+//     const token = localStorage.getItem('userToken');
+//     if (token) {
+//       headers.set("authorization", `Bearer ${token}`);
+//     }
+//     return headers;
+//   },
+// });
+
+// const baseQueryWith401Handler = async (args, api, extraOptions) => {
+//   const result = await baseQuery(args, api, extraOptions);
+  
+//   // Handle 401 Unauthorized Error
+//   if (result.error && result.error.status === 401) {
+//     toast.error("Unauthorized access. Please log in.");
+
+//     // Optional: Perform a logout if you want to clear the user's session
+//     // api.dispatch(logoutUser()); // Logout logic can be implemented here
+//   }
+
+//   return result;
+// };

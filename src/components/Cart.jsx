@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Spinner from "../icons/Spinner";
-import { useDispatch } from "react-redux";
 import {
   useGetUserCartQuery,
   useClearItemFromCartMutation,
