@@ -1,15 +1,12 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { getApiData } from "../helpers/getApiData";
-import { ProductRoutes } from "../routes/productRoutes";
-import { useQuery } from "react-query";
 import Spinner from "../icons/Spinner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-import { ShoppingCartIcon, StarIcon } from "@heroicons/react/24/outline";
-import { useAddToCartMutation } from "../redux/APIs/cartApis";
+import { StarIcon } from "@heroicons/react/24/outline";
 import { useGetProductQuery, useGetWishlisttQuery } from "../redux/APIs/productApi";
 import HeartIcon from "./HeartIcon";
+import AddToCartButton from "./common/AddToCartButton";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -20,7 +17,6 @@ export default function ProductDetails() {
     isLoading,
     isFetching,
   } = useGetProductQuery(id);
-  const [addToCart, { isLoading: isButtonLoading }] = useAddToCartMutation();
 
   const handleThumbnailClick = (index) => {
     if (swiperRef.current) {
@@ -35,14 +31,6 @@ export default function ProductDetails() {
     [wishlist]
   );
 
-  const handleAddToCart = async (productId) => {
-    console.log(`Added product ${productId} to the cart`);
-    try {
-      await addToCart(productId).unwrap();
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-    }
-  };
 
   return (
     <>
@@ -128,13 +116,7 @@ export default function ProductDetails() {
 
                 {/* Add to Cart Button */}
                 <div className="mt-6 flex space-x-4">
-                  <button
-                    onClick={() => handleAddToCart(product.id)}
-                    className="flex items-center justify-center px-4 py-2 bg-dark-simon text-white font-semibold rounded-lg hover:bg-simon"
-                  >
-                    <ShoppingCartIcon className="h-5 w-5 mr-2" />
-                    Add to Cart
-                  </button>
+                 <AddToCartButton productId={product.id} />
                 </div>
               </div>
             </div>

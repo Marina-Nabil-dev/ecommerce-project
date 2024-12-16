@@ -1,22 +1,27 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation"; // if you need navigation
 import "swiper/css/pagination"; // if you need pagination
 import Spinner from "../icons/Spinner";
 import { Link } from "react-router-dom";
-import { useAddToCartMutation } from "../redux/APIs/cartApis";
 import {
   useGetAllProductsQuery,
   useGetWishlisttQuery,
 } from "../redux/APIs/productApi";
 import HeartIcon from "./HeartIcon";
+import AddToCartButton from "./common/AddToCartButton";
 
 const AllProducts = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 8; // Items per page
   const inputRef = useRef(null);
-
 
   const {
     data: { products = [], totalCount = 0 } = {},
@@ -24,22 +29,16 @@ const AllProducts = () => {
     isFetching,
   } = useGetAllProductsQuery({ currentPage, limit });
 
-  const [addToCart, { cartIsLoading }] = useAddToCartMutation();
-  const handleAddToCart = async (productId) => {
-    try {
-      await addToCart(productId).unwrap();
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-    }
-  };
   const totalPages = Math.ceil(totalCount / limit);
 
   const isLastPage = currentPage === totalPages;
 
   const { data: { wishlist = [] } = {} } = useGetWishlisttQuery();
 
-  const isProductInWishlist = useCallback((productId) =>
-     (wishlist.some((product) => product.id === productId)), [wishlist])
+  const isProductInWishlist = useCallback(
+    (productId) => wishlist.some((product) => product.id === productId),
+    [wishlist]
+  );
 
   return (
     <>
@@ -115,13 +114,7 @@ const AllProducts = () => {
                   </Link>
 
                   <div className="flex my-2 items-center justify-center">
-                    {cartIsLoading && <Spinner />}
-                    <button
-                      onClick={() => handleAddToCart(product.id)}
-                      className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
-                    >
-                      Add To Cart
-                    </button>
+                    <AddToCartButton productId={product.id} />
                   </div>
                 </div>
               </div>

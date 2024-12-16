@@ -6,24 +6,13 @@ import "swiper/css/pagination"; // if you need pagination
 import Spinner from "../../icons/Spinner";
 import { Link } from "react-router-dom";
 import { NavbarRoutes } from "../../routes/navbarRoutes";
-import { useDispatch } from "react-redux";
 import { useGetAllProductsQuery } from "../../redux/APIs/productApi";
-import { useAddToCartMutation } from "../../redux/APIs/cartApis";
+import AddToCartButton from "../common/AddToCartButton";
 const RecentlyAddedSection = () => {
   const { data: { products = [] } = {}, isLoading } = useGetAllProductsQuery({
     page: 1,
     limit: 7,
   });
-
-  const [addToCart] = useAddToCartMutation();
-
-  const handleAddToCart = async (productId) => {
-    try {
-      await addToCart(productId).unwrap();
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-    }
-  };
 
   return (
     <>
@@ -84,12 +73,7 @@ const RecentlyAddedSection = () => {
                     </div>
                   </Link>
                   <div className="flex my-2 items-center justify-center">
-                    <button
-                      className="bg-dark-simon items-center justify-center hover:font-bold text-white px-4 py-2 rounded"
-                      onClick={() => handleAddToCart(product._id)}
-                    >
-                      Add To Cart
-                    </button>
+                    <AddToCartButton productId={product.id} />
                   </div>
                 </div>
               </div>

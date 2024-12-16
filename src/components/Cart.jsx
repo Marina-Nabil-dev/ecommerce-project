@@ -32,10 +32,9 @@ export default function Cart() {
 
   const [removeItemFromCart] = useRemoveItemFromCartMutation();
   const handlRemoveItem = async (productId) => {
-    
     try {
       removeItemFromCart(productId).unwrap();
-      cartList.filter(item => item._id !== productId)
+      cartList.filter((item) => item._id !== productId);
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
@@ -50,7 +49,7 @@ export default function Cart() {
   };
 
   const [quantities, setQuantities] = useState({});
-  
+
   useEffect(() => {
     if (cartList.length > 0) {
       const initialQuantities = cartList.reduce((acc, item) => {
